@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:flexunit="flexunit.flexui.*"
+	creationComplete="runTests()" >
+
+	<mx:Script>
+		<![CDATA[
+			import flexunit.framework.Test;
+			import flexunit.framework.TestSuite;
+			
+			import com.sophware.undoredo.tests.UndoStackTest;
+			
+			private function runTests():void {
+				testRunner.test = createSuite();
+				testRunner.startTest();
+			}
+			
+			private function createSuite():TestSuite {
+				var ts:TestSuite = new TestSuite();
+				ts.addTestSuite(UndoStackTest);
+				return ts;
+			}
+		]]>
+	</mx:Script>
+
+	<flexunit:TestRunnerBase id="testRunner" width="100%" height="100%" />
+
+</mx:Application>

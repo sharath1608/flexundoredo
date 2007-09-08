@@ -1,5 +1,9 @@
 package com.sophware.undoredo
 {
+	/**
+	 * 
+	 * TODO: this does NOT handle asynchronous events
+	 */
 	public class AggregateUndoCommand extends UndoCommand
 	{
 		public static var FIFO:String = "FIFO";

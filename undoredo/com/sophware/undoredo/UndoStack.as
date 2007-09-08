@@ -2,6 +2,7 @@ package com.sophware.undoredo
 {
 	import mx.collections.ArrayCollection;
 	import com.sophware.undoredo.UndoCommand;
+	import com.adobe.cairngorm.control.CairngormEvent;
 	
 	/**
 	 * @class UndoStack
@@ -74,8 +75,11 @@ package com.sophware.undoredo
 		 *
 		 * If previous operations had been undone but not redone, all commands
 		 * after the command at index() will be deleted.
+		 * 
+		 * @param cmd The command being pushed onto the stack
+		 * @param event The payload for the command being pushed onto the stack
 		 */
-		public function push(cmd:UndoCommand):void {
+		public function push(cmd:IUndoCommand, event:CairngormEvent = null):void {
 			if (canRedo) {
 				// delete all the currently redoable events
 				removeCmds(_stackIndex + 1, _stack.length);
@@ -85,8 +89,7 @@ package com.sophware.undoredo
 				addUndoCmd(cmd);
 			}
 			
-			
-			cmd.redo();
+			cmd.redo(event);
 		}
 
 
@@ -195,7 +198,7 @@ package com.sophware.undoredo
 		/**
 		 * Adds an item to the top of the stack
 		 */
-		protected function addUndoCmd(cmd:UndoCommand):void {
+		protected function addUndoCmd(cmd:IUndoCommand):void {
 			_stack.addItem(cmd);
 			_stackIndex++;
 		}

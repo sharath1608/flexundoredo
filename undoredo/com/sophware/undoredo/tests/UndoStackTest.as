@@ -41,30 +41,48 @@ package com.sophware.undoredo.tests
 		}
 		
 		public function testIndex():void {
+			var cmd:UndoCommand = new UndoCommand();
+			cmd.text = "testCmd";
 			assertEquals( -1, us.index );
-			us.push(new UndoCommand());
+			us.push(cmd);
 			assertEquals( 0, us.index );
 		}
 		
 		public function testText():void {
-			us.push(new UndoCommand("testCmd"));
-			us.push(new UndoCommand("otherCmd"));
+			var cmd1:UndoCommand = new UndoCommand();
+			var cmd2:UndoCommand = new UndoCommand();
+			cmd1.text = "testCmd";
+			cmd2.text = "otherCmd";
+			
+			us.push(cmd1);
+			us.push(cmd2);
 			assertEquals("testCmd", us.text(0) );
 			assertEquals("otherCmd", us.text(1) );
 		}
 		
 		public function testUndoText():void {
-			us.push(new UndoCommand("testCmd"));
+			var cmd1:UndoCommand = new UndoCommand();
+			var cmd2:UndoCommand = new UndoCommand();
+			cmd1.text = "testCmd";
+			cmd2.text = "otherCmd";
+			
+			us.push(cmd1);
 			assertEquals( "testCmd", us.undoText );
-			us.push(new UndoCommand("otherCmd"));
+			us.push(cmd2);
 			assertEquals( "otherCmd", us.undoText );
 			us.undo();
 			assertEquals( "testCmd", us.undoText );
 		}
 		
 		public function testRedoText():void {
-			us.push(new UndoCommand("testCmd"));
-			us.push(new UndoCommand("otherCmd"));
+			var cmd1:UndoCommand = new UndoCommand();
+			var cmd2:UndoCommand = new UndoCommand();
+			cmd1.text = "testCmd";
+			cmd2.text = "otherCmd";
+			
+			us.push(cmd1);
+			us.push(cmd2);
+			
 			us.undo();
 			assertEquals( "otherCmd", us.redoText );
 			us.undo();

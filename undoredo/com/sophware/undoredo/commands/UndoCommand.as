@@ -3,55 +3,129 @@ package com.sophware.undoredo.commands
 	import com.adobe.cairngorm.commands.ICommand;
 	import com.adobe.cairngorm.control.CairngormEvent;
 	
+	/**
+	 * A suitable base class that implements the IUndoCommand interface.
+	 *
+	 * @see com.sophware.undoredo.commands.IUndoCommand
+	 */
 	public class UndoCommand implements IUndoCommand
 	{
-		public static var UNDOTYPE_NORMAL:String = "normal";
-		public static var UNDOTYPE_IGNORED:String = "ignored";
-		public static var UNDOTYPE_RESET:String = "reset";
-				
+		/**
+		 * The "normal" undoType as specified by IUndoCommand
+		 */
+		public static const UNDOTYPE_NORMAL:String = "normal";
+		
+		/**
+		 * The "ignored" undoType as specified by IUndoCommand
+		 */
+		public static const UNDOTYPE_IGNORED:String = "ignored";
+		
+		/**
+		 * The "reset" undoType as specified by IUndoCommand
+		 */
+		public static const UNDOTYPE_RESET:String = "reset";
+		
+		
 		private var _text:String;
 		private var _undoType:String;
 		
-		public function UndoCommand():void {
+		
+		/**
+		 * Creates an UndoCommand with no text specified
+		 */
+		public function UndoCommand():void
+		{
 			_undoType = UNDOTYPE_NORMAL;
+			_text = "";
 		}
 		
-		public function get id() : Number {
+
+		/**
+		 * The id associated with the specific IUndoCommand type
+		 */
+		public function get id() : Number
+		{
 			return -1;
 		}
 		
-		public function mergeWith( cmd : IUndoCommand ) : Boolean {
+
+		/**
+		 * Attempts to merge two distinct undo commands into a single
+		 * operation.
+		 */
+		public function mergeWith( cmd : IUndoCommand ) : Boolean
+		{
 			return false;
 		}
-		
-		public function undo( event : CairngormEvent = null ) : void {
+
+	
+		/**
+		 * Performs an undo operation
+		 */
+		public function undo() : void
+		{
 			// must be overriden in derived class
 		}
 		
-		public function redo( event : CairngormEvent = null ) : void {
+
+		/**
+		 * Performs the initial modifications, as well as the redo operation
+		 * after an undo event.  Note that these operations should be
+		 * equivalent.
+		 */
+		public function redo( event : CairngormEvent = null ) : void
+		{
 			// must be overriden in derived class
 		}
 		
-		public function execute( event : CairngormEvent ) : void {
+
+		/**
+		 * Execute is called by the front controller and is only used for the
+		 * initial set of modifications.  This normally does not need to be
+		 * overridden as it calls redo() which will perform the necessary
+		 * changes
+		 */
+		public function execute( event : CairngormEvent ) : void
+		{
 			// doesn't need to be overridden, should always be equivalent to redo
 			redo(event);
 		}
-		
+	
+
+		/**
+		 * Returns the text description of this command
+		 */
 		[Bindable]
-		public function get text() : String {
+		public function get text() : String
+		{
 			return _text;
 		}
 		
-		public function set text( text: String ) : void {
+
+		/**
+		 * Sets the text description of this command
+		 */
+		public function set text( text: String ) : void
+		{
 			_text = text;
 		}
 		
+
+		/**
+		 * Returns the undo type associated with the command
+		 */
 		[Bindable]
-		public function get undoType() : String {
+		public function get undoType() : String
+		{
 			return _undoType;
 		}
 		
-		public function set undoType(type : String) : void {
+
+		/**
+		 * Sets the undo type associated with the command
+		 */
+		public function set undoType(type : String) : void
+		{
 			_undoType = type;
 		}
 	}

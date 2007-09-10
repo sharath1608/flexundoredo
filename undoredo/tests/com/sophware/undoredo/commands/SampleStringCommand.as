@@ -9,7 +9,7 @@ package tests.com.sophware.undoredo.commands
 		private var _appendText:String;
 		private var _data:Object;
 		
-		public override function undo(event:CairngormEvent = null):void
+		public override function undo():void
 		{
 			_data.value = _data.value.slice( 0, _data.value.length - _appendText.length );
 		}
@@ -21,9 +21,6 @@ package tests.com.sophware.undoredo.commands
 				_appendText = _data.appendText;
 			}
 			_data.value = _data.value.concat(_appendText);
-			trace("-- event:",event);
-			trace("-- event.data:",_data);
-			trace("-- event.data.value:", _data.value);
 		}
 	}
 }

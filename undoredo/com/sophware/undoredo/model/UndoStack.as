@@ -6,20 +6,29 @@ package com.sophware.undoredo.model
 	import com.adobe.cairngorm.control.CairngormEvent;
 	
 	/**
-	 * @class UndoStack
+	 * Maintains a list of undoable and redoable operations.
 	 * 
+	 * <p>
+	 * The UndoStack contains a list of undo commands.  Each command can be
+	 * undone or be redone.  If after an series of undo operations, a new
+	 * event is pushed onto the undo stack, all events that had not yet been
+	 * redone are deleted from the stack and the new operation is pushed onto
+	 * the stack.
+	 * </p>
+	 * 
+	 * <p>
 	 * This UndoStack class is based on the QUndoStack class that comes with
 	 * Qt 4.X.  See http://doc.trolltech.com/4.3/qundostack.html.  It is a well
 	 * designed class that leverages the command design pattern for undo and
 	 * redo events.
+	 * </p>
+	 *
 	 */
 	public class UndoStack
 	{
 		private var _stack:ArrayCollection = new ArrayCollection();
 		private var _stackIndex:Number = -1;
-		private var _undoLimit:Number = 0;
-
-
+	
 		/**
 		 * True if an undoable event is present on the stack
 		 */
@@ -103,32 +112,15 @@ package com.sophware.undoredo.model
 			return null;
 		}
 
-
 		/**
-		 * Limits he number of commands that can be undone 
-		 * param limit The number of commands that can be undone
-		 */
-		public function set undoLimit(limit:Number):void {
-			if (limit > 0)
-				_undoLimit = limit;
-		}
-	
-
-		/**
-		 * Returns the number of commands that can be undone
-		 */
-		public function get undoLimit():Number {
-			return _undoLimit;
-		}
-
-		
-		/**
-		 * Returns the text associated with a specific index
+		 * Returns the undo text associated with \a index
+		 * 
+		 * @param index A non-negative index number
 		 */
 		public function text(index:Number):String {
 			if (isValidIndex(index))
 				return _stack[index].text;
-			return null;
+			return "";
 		}
 
 
@@ -138,12 +130,12 @@ package com.sophware.undoredo.model
 		public function get undoText():String {
 			if (_stack.length)
 				return _stack[_stackIndex].text;
-			return null;
+			return "";
 		}
 
 
 		/**
-		 * Performs an undo operation
+		 * Performs an undo operation if one is available
 		 */
 		public function undo():void {
 			if (!_stack.length)
@@ -154,7 +146,7 @@ package com.sophware.undoredo.model
 
 		
 		/**
-		 * Performs a redo operation
+		 * Performs a redo operation if one is available
 		 */
 		public function redo():void {
 			if (!canRedo)
@@ -167,6 +159,8 @@ package com.sophware.undoredo.model
 		/**
 		 * Repeatedly calls undo or redo to change change the state of the
 		 * document.
+		 * 
+		 * @param index a non-negative index number
 		 */
 		public function set index(index:Number):void {
 			if (!isValidIndex(index))
@@ -188,7 +182,11 @@ package com.sophware.undoredo.model
 
 
 		/**
+		 * @internal
+		 *
 		 * Returns true if the index is valid
+		 * 
+		 * @param ix a non-negative index number
 		 */
 		protected function isValidIndex(ix:Number):Boolean {
 			if (ix >=0 && ix < count)
@@ -197,7 +195,11 @@ package com.sophware.undoredo.model
 		}
 
 		/**
-		 * Adds an item to the top of the stack
+		 * @internal
+		 *
+		 * Adds an undo command to the top of the stack
+		 * 
+		 * @param cmd The undo command to add to the stack
 		 */
 		protected function addUndoCmd(cmd:IUndoCommand):void {
 			_stack.addItem(cmd);
@@ -205,7 +207,9 @@ package com.sophware.undoredo.model
 		}
 
 		/**
-		 * Removes the top item from the stack
+		 * @internal
+		 * 
+		 * Removes the top undo command from the stack
 		 */
 		protected function removeUndoCmd():void {
 			_stack.removeItemAt(_stack.length - 1);
@@ -213,17 +217,22 @@ package com.sophware.undoredo.model
 		}
 
 		/**
+		 * @internal
+		 *
 		 * Removes the items between the first index (inclusive) and the last
 		 * index (exclusive).
-		 * @param start The starting index, included in removal
-		 * @param end The ending index, excluded from removal
 		 *
- 		 * @note It is assumed that _stackIndex is already set to something
+		 * <p>
+ 		 * It is assumed that _stackIndex is already set to something
 		 * lower than the entries being removed, thus it is safe to perform
 		 * this operation.  It will normally be used after a series of undo
 		 * events have been performed and then a new undo event is pushed onto
 		 * the stack, thus removing all the entries that are currently after
-		 * the current _stackIndex;
+		 * the current _stackIndex
+		 * </p>
+		 * 
+		 * @param start The starting index, included in removal
+		 * @param end The ending index, excluded from removal
 		 */
 		protected function removeCmds(start:Number, end:Number):void {
 			if (end >= start || start < 0)

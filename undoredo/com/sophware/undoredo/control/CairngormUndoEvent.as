@@ -2,13 +2,23 @@ package com.sophware.undoredo.control
 {
 	import com.adobe.cairngorm.control.CairngormEvent;
 
+	/**
+	 * A CairngormUndoEvent that contains a description of the undo/redo
+	 * operation.
+	 * 
+	 * <p>The text property contains text that can be displayed to the user
+	 */
 	public class CairngormUndoEvent extends CairngormEvent
 	{
-		private var _undoText:String;
+		private var _text:String;
 		
-		public function CairngormUndoEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false)
+		/**
+		 * Creates a CairngormUndoEvent
+		 */
+		public function CairngormUndoEvent(text:String, type:String, bubbles:Boolean=false, cancelable:Boolean=false)
 		{
 			super(type, bubbles, cancelable);
+			_text = text;
 		}
 		
 		/**
@@ -21,17 +31,17 @@ package com.sophware.undoredo.control
 		 * be undone.
 		 * </p>
 		 */
-		public function get undoText() : String
+		public function get text() : String
 		{
-			return _undoText;
+			return _text;
 		}
 		
 		/**
 		 * Sets the text displayed describing the next event to be undone
 		 */
-		public function set undoText( text : String ) : void 
+		public function set text( text : String ) : void 
 		{
-			_undoText = text;
+			_text = text;
 		}
 	}
 }

@@ -1,4 +1,4 @@
-package com.sophware.undoredo.tests
+package tests.com.sophware.undoredo.commands
 {
 	import flexunit.framework.TestCase;
 	import com.sophware.undoredo.AggregateUndoCommand;

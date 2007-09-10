@@ -1,4 +1,4 @@
-package com.sophware.undoredo
+package com.sophware.undoredo.commands
 {
 	import com.adobe.cairngorm.commands.ICommand;
 	import com.adobe.cairngorm.control.CairngormEvent;

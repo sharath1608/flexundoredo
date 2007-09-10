@@ -9,9 +9,9 @@
 			import flexunit.framework.Test;
 			import flexunit.framework.TestSuite;
 			
-			import com.sophware.undoredo.tests.UndoStackTest;
-			import com.sophware.undoredo.tests.UndoCommandTest;
-			import com.sophware.undoredo.tests.UndoFrontControllerTest;
+			import tests.com.sophware.undoredo.model.UndoStackTest;
+			import tests.com.sophware.undoredo.commands.UndoCommandTest;
+			import tests.com.sophware.undoredo.control.UndoFrontControllerTest;
 			
 			private function runTests():void {
 				testRunner.test = createSuite();

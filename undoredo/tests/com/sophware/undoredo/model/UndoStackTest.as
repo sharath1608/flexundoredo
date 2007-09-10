@@ -1,10 +1,9 @@
-package com.sophware.undoredo.tests
+package tests.com.sophware.undoredo.model
 {
 	import flexunit.framework.TestCase;
-	import com.sophware.undoredo.UndoStack;
-	import com.sophware.undoredo.UndoCommand;
-	import com.sophware.undoredo.UndoCommand;
-
+	import com.sophware.undoredo.model.UndoStack;
+	import com.sophware.undoredo.commands.UndoCommand;
+	
 	public class UndoStackTest extends TestCase
 	{
 		private var us:UndoStack;

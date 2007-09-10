@@ -1,8 +1,8 @@
-package com.sophware.undoredo.tests
+package tests.com.sophware.undoredo.commands
 {
 	import com.adobe.cairngorm.control.CairngormEvent;
-	import com.sophware.undoredo.UndoCommand;
-
+	import com.sophware.undoredo.commands.UndoCommand;
+	import tests.com.sophware.undoredo.control.SampleAppendEvent;
 
 	public class SampleStringCommand extends UndoCommand
 	{

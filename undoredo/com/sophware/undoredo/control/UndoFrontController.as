@@ -6,10 +6,11 @@ package com.sophware.undoredo.control
 	import com.adobe.cairngorm.CairngormError;
 	import com.adobe.cairngorm.CairngormMessageCodes;
 	
-	import com.sophware.undoredo.model.UndoModelLocator;
-	import com.sophware.undoredo.IUndoCommand;
-	import com.sophware.undoredo.UndoCommand;
-	import com.sophware.undoredo.UndoStack;
+	import com.sophware.undoredo.commands.IUndoCommand;
+	import com.sophware.undoredo.commands.UndoCommand;
+	import com.sophware.undoredo.model.UndoStack;
+	import com.sophware.cairngorm.model.NamedObjectLocator;
+	import com.sophware.undoredo.model.UndoGroup;
 	
 	/**
 	 * 
@@ -17,12 +18,16 @@ package com.sophware.undoredo.control
 	 */
 	public class UndoFrontController extends FrontController
 	{
-		private var undoStack:UndoStack;
+		private var _locator:NamedObjectLocator;
+		private var _undoGroup:UndoGroup;
 		
 		public function UndoFrontController()
 		{
 			super();
-			undoStack = UndoModelLocator.getInstance().stack;
+			_locator = NamedObjectLocator.getInstance();
+			_locator.setObject("undoGroup", new UndoGroup());	
+			_undoGroup = _locator.getObject("undoGroup") as UndoGroup;
+			_undoGroup.addStack("defaultStack");
 		}
 		
 		protected override function executeCommand( event : CairngormEvent ) : void 
@@ -34,24 +39,30 @@ package com.sophware.undoredo.control
 				var cmd:IUndoCommand = commandToExecute as IUndoCommand;
 				switch (cmd.undoType) {
 					case UndoCommand.UNDOTYPE_NORMAL:
-						undoStack.push(cmd, event);
+						_undoGroup.activeStack.push(cmd, event);
 						break;
 					case UndoCommand.UNDOTYPE_IGNORED:
 						cmd.execute(event);
 						break;
 					case UndoCommand.UNDOTYPE_RESET:
 						cmd.execute(event);
-						undoStack.clear();
+						_undoGroup.activeStack.clear();
 					default:
 						trace("Unknown undo type");
 				}
 			} else  {
-				// by default a non-undoable command causes the stack to be reset.
+				//
+				// by default a command that doesn't implement the IUndoCommand interface
+				// is a command that is non-undoable and, therefore, will cause the undo
+				// stack to be reset.
+				// 
 				// if an event that is ignorable is really desired, implement the
 				// IUndoCommand interface and set the undoType to:
+				//
 				// UndoCommand.UNDOTYPE_IGNORED
+				//
 				commandToExecute.execute( event );
-				undoStack.clear();
+				_undoGroup.activeStack.clear();
 	        }
 		}
 	}

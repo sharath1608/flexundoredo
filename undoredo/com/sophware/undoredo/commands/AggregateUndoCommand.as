@@ -1,4 +1,4 @@
-package com.sophware.undoredo
+package com.sophware.undoredo.commands
 {
 	/**
 	 * 

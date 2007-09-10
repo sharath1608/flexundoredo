@@ -1,4 +1,4 @@
-package com.sophware.undoredo.tests
+package tests.com.sophware.undoredo.control
 {
 	import com.adobe.cairngorm.control.CairngormEvent;
 

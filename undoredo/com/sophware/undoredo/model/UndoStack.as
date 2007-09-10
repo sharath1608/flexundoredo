@@ -1,7 +1,8 @@
-package com.sophware.undoredo
+package com.sophware.undoredo.model
 {
 	import mx.collections.ArrayCollection;
-	import com.sophware.undoredo.UndoCommand;
+	import com.sophware.undoredo.commands.UndoCommand;
+	import com.sophware.undoredo.commands.IUndoCommand;
 	import com.adobe.cairngorm.control.CairngormEvent;
 	
 	/**

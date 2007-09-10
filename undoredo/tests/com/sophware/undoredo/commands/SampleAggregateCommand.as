@@ -1,4 +1,4 @@
-package com.sophware.undoredo.tests
+package tests.com.sophware.undoredo.commands
 {
 	import com.sophware.undoredo.AggregateUndoCommand;
 

@@ -1,7 +1,6 @@
-package com.sophware.undoredo
+package com.sophware.undoredo.commands
 {
 	import com.adobe.cairngorm.commands.ICommand;
-	import com.sophware.undoredo.IUndoCommand;
 	import com.adobe.cairngorm.control.CairngormEvent;
 
 	public interface IUndoCommand extends ICommand

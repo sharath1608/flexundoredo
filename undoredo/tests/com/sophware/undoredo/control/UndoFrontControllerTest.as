@@ -1,4 +1,4 @@
-package com.sophware.undoredo.tests
+package tests.com.sophware.undoredo.control
 {
 	import flash.utils.Timer;
 	import flash.events.TimerEvent;
@@ -9,9 +9,11 @@ package com.sophware.undoredo.tests
 	import com.adobe.cairngorm.control.CairngormEvent;
 
 	import com.sophware.undoredo.control.UndoFrontController;
-	import com.sophware.undoredo.tests.SampleAppendEvent;
 	import com.sophware.undoredo.control.UndoStackEvent;
-	import com.sophware.undoredo.control.UndoStackCommand;
+	import com.sophware.undoredo.commands.UndoStackCommand;
+	
+	import tests.com.sophware.undoredo.control.SampleAppendEvent;
+	import tests.com.sophware.undoredo.commands.SampleStringCommand;
 
 	public class UndoFrontControllerTest extends TestCase
 	{
@@ -31,6 +33,7 @@ package com.sophware.undoredo.tests
 		{
 			var event:SampleAppendEvent = invokeAppendCommand();
 			
+			// create a closure that will be used to test the object
 			var f:Function = function(e:*):void
 			{
 				// make sure that it was actually called correctly
@@ -47,6 +50,7 @@ package com.sophware.undoredo.tests
 				new UndoStackEvent()
 				);
 
+			// create a closure that will be used to test the object
 			var f:Function = function(e:*):void
 			{
 				// make sure that it was actually called correctly
@@ -69,6 +73,7 @@ package com.sophware.undoredo.tests
 			redo.operation = UndoStackEvent.OPERATION_REDO;
 			CairngormEventDispatcher.getInstance().dispatchEvent( redo );
 
+			// create a closure that will be used to test the object
 			var f:Function = function(e:*):void
 			{
 				// make sure that it was actually called correctly
@@ -77,10 +82,30 @@ package com.sophware.undoredo.tests
 			callbackHelper(f);
 		}
 	
-		private function callbackHelper(f:Function, runIn:uint=10, timeout:uint=50) : void
+		/**
+		 * Takes the callback function and dispatches an event handler
+		 * 
+		 * <p>
+		 * \a func is a function (often a closure) that is used to test the results
+		 * of a function.  This is _not_ the best way to test.  The correct implementation
+		 * would be as follows:
+		 * </p>
+		 * 
+		 * <tt>
+		 * http://jharbs.com/blog/?p=96
+		 * </tt>
+		 * 
+		 * <p>
+		 * However, that would require that everybody this was distributed to be using
+		 * a patched version of FlexUnit, which is certainly less than ideal.  Thus, I
+		 * use a simple callback with a timeout by which the operations are expected to
+		 * have completed.
+		 * </p>
+		 */
+		private function callbackHelper(func:Function, runIn:uint=10, timeout:uint=50) : void
 		{
 			var t:Timer = new Timer(runIn, 1);
-			t.addEventListener(TimerEvent.TIMER_COMPLETE, addAsync(f, timeout));
+			t.addEventListener(TimerEvent.TIMER_COMPLETE, addAsync(func, timeout));
 			t.start();
 		}
 

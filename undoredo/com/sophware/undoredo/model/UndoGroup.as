@@ -22,6 +22,8 @@ package com.sophware.undoredo.model
 	public class UndoGroup
 	{
 		private var _stacks:Dictionary;
+		
+		[Bindable]
 		private var _currentStack:Object;
 
 		/**
@@ -118,21 +120,30 @@ package com.sophware.undoredo.model
 		/**
 		 * Returns the active undo stack
 		 */
-		[Bindable]
 		public function get activeStack() : UndoStack
 		{
 			return _stacks[_currentStack];
 		}
 
 		/**
-		 * Sets the active undo stack to the \a name stack
+		 * Sets the active undo stack to the stack associated with \a name.
+		 * 
+		 * <p>
+		 * Note that \a name can be any object.  Thus, you might use the view
+		 * that is being displayed as the name of the object, or you might use
+		 * a string name that describes what the stack holds, such as as a
+		 * filename, etc.
+		 * </p>
 		 * 
 		 * @param name The name of the undo stack to be made active
 		 */
-		public function set activeStack( name : Object ) : void
+		public function setActiveStack( name : Object ) : Boolean
 		{
-			if (hasStack(name))
-				_currentStack = name;
+			if (!hasStack(name))
+				return false;
+			_currentStack = name;
+			return true;
+			
 		}
 
 	}

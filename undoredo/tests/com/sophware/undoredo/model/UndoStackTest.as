@@ -19,6 +19,7 @@ package tests.com.sophware.undoredo.model
 		}
 		
 		public function testCanRedo():void {
+			assertFalse(us.canRedo);
 			us.push(new UndoCommand());
 			us.undo();
 			assertTrue(us.canRedo);
@@ -65,6 +66,7 @@ package tests.com.sophware.undoredo.model
 			cmd1.text = "testCmd";
 			cmd2.text = "otherCmd";
 			
+			assertEquals( "", us.undoText );
 			us.push(cmd1);
 			assertEquals( "testCmd", us.undoText );
 			us.push(cmd2);
@@ -79,8 +81,12 @@ package tests.com.sophware.undoredo.model
 			cmd1.text = "testCmd";
 			cmd2.text = "otherCmd";
 			
+			assertEquals( "", us.redoText );
+			
 			us.push(cmd1);
 			us.push(cmd2);
+
+			assertEquals( "", us.redoText );
 			
 			us.undo();
 			assertEquals( "otherCmd", us.redoText );

@@ -1,9 +1,10 @@
 package com.sophware.undoredo.model
 {
 	import mx.collections.ArrayCollection;
+	
+	import com.adobe.cairngorm.control.CairngormEvent;
 	import com.sophware.undoredo.commands.UndoCommand;
 	import com.sophware.undoredo.commands.IUndoCommand;
-	import com.adobe.cairngorm.control.CairngormEvent;
 	
 	/**
 	 * Maintains a list of undoable and redoable operations.
@@ -77,6 +78,10 @@ package com.sophware.undoredo.model
 		 * Pushes \a cmd onto the UndoStack and executes the command.  The
 		 * command will attempt to be merged with the prior command.
 		 * 
+		 * The command will be executed with its execute() method when pushed.
+		 * The execute method should generally delegate to the redo() method
+		 * which will be called for subsequent redo operations.
+		 * 
 		 * If the id for the cmd is non-negative and the id for the prior
 		 * command and the command being pushed onto the stack are the same
 		 * then OldCmd.mergeWith() will be called.  If OldCmd.mergeWith()
@@ -85,11 +90,12 @@ package com.sophware.undoredo.model
 		 *
 		 * If previous operations had been undone but not redone, all commands
 		 * after the command at index() will be deleted.
-		 * 
+		 *
 		 * @param cmd The command being pushed onto the stack
 		 * @param event The payload for the command being pushed onto the stack
 		 */
 		public function push(cmd:IUndoCommand, event:CairngormEvent = null):void {
+			
 			if (canRedo) {
 				// delete all the currently redoable events
 				removeCmds(_stackIndex + 1, _stack.length);
@@ -99,7 +105,7 @@ package com.sophware.undoredo.model
 				addUndoCmd(cmd);
 			}
 			
-			cmd.redo(event);
+			cmd.execute(event);
 		}
 
 
@@ -109,7 +115,7 @@ package com.sophware.undoredo.model
 		public function get redoText():String {
 			if (canRedo)
 				return _stack[_stackIndex+1].text;
-			return null;
+			return "";
 		}
 
 		/**
@@ -128,7 +134,7 @@ package com.sophware.undoredo.model
 		 * Returns the undo text for the next undo command
 		 */
 		public function get undoText():String {
-			if (_stack.length)
+			if (canUndo)
 				return _stack[_stackIndex].text;
 			return "";
 		}

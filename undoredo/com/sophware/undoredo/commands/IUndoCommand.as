@@ -33,6 +33,15 @@ package com.sophware.undoredo.commands
 		 * model, etc.  redo() is expected to store the necessary data to be
 		 * able to undo the operation when undo() is called.
 		 * </p>
+		 * 
+		 * <p>
+		 * If the command wishes to use the text associated with a
+		 * CairngormUndoEvent as its text then the redo event is responsible
+		 * for pulling the data out of the event and placing it into the text
+		 * property of the command.  This is the default behavior in
+		 * UndoCommand, but overriding functions will need to call the parent's
+		 * redo() function to have this behavior.
+		 * </p>
 		 */
 		function redo( event : CairngormEvent = null) : void;
 

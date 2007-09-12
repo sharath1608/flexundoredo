@@ -2,6 +2,7 @@ package com.sophware.undoredo.commands
 {
 	import com.adobe.cairngorm.commands.ICommand;
 	import com.adobe.cairngorm.control.CairngormEvent;
+	import com.sophware.undoredo.control.CairngormUndoEvent;
 	
 	/**
 	 * A suitable base class that implements the IUndoCommand interface.
@@ -83,11 +84,16 @@ package com.sophware.undoredo.commands
 		 * Execute is called by the front controller and is only used for the
 		 * initial set of modifications.  This normally does not need to be
 		 * overridden as it calls redo() which will perform the necessary
-		 * changes
+		 * changes.  If the event type is CairngormUndoEvent, before calling
+		 * redo, it will set the text of the undo command based on the text
+		 * property of the event.
 		 */
 		public function execute( event : CairngormEvent ) : void
 		{
 			// doesn't need to be overridden, should always be equivalent to redo
+			if (event is CairngormUndoEvent)
+				text = (event as CairngormUndoEvent).text;
+			
 			redo(event);
 		}
 	

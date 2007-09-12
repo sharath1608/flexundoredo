@@ -10,8 +10,10 @@
 			import flexunit.framework.TestSuite;
 			
 			import tests.com.sophware.undoredo.model.UndoStackTest;
+			import tests.com.sophware.undoredo.model.UndoGroupTest;
 			import tests.com.sophware.undoredo.commands.UndoCommandTest;
 			import tests.com.sophware.undoredo.control.UndoFrontControllerTest;
+			import tests.com.sophware.undoredo.commands.AggregateUndoCommandTest;
 			
 			private function runTests():void {
 				testRunner.test = createSuite();
@@ -23,6 +25,8 @@
 				ts.addTestSuite(UndoStackTest);
 				ts.addTestSuite(UndoCommandTest);
 				ts.addTestSuite(UndoFrontControllerTest);
+				ts.addTestSuite(UndoGroupTest);
+				ts.addTestSuite(AggregateUndoCommandTest);
 				return ts;
 			}
 		]]>

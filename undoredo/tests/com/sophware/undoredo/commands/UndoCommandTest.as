@@ -16,7 +16,7 @@ package tests.com.sophware.undoredo.commands
 		
 		public function testUndo():void {
 			var cmd:SampleStringCommand = new SampleStringCommand();
-			var event:SampleAppendEvent = new SampleAppendEvent("Some String", " appended text");
+			var event:SampleAppendEvent = new SampleAppendEvent("append", "Some String", " appended text");
 
 			assertEquals("Some String", event.data.value);
 			_stack.push(cmd, event);
@@ -27,7 +27,7 @@ package tests.com.sophware.undoredo.commands
 		
 		public function  testRedo():void {
 			var cmd:SampleStringCommand = new SampleStringCommand();
-			var event:SampleAppendEvent = new SampleAppendEvent("Some String", " appended text");
+			var event:SampleAppendEvent = new SampleAppendEvent("append", "Some String", " appended text");
 
 			assertEquals("Some String", event.data.value);
 			_stack.push(cmd, event);

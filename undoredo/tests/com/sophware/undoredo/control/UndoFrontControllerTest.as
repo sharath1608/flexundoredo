@@ -111,7 +111,7 @@ package tests.com.sophware.undoredo.control
 
 		private function invokeAppendCommand():SampleAppendEvent
 		{
-			var event:SampleAppendEvent = new SampleAppendEvent("first","second");
+			var event:SampleAppendEvent = new SampleAppendEvent("append", "first","second");
 
 			// test the value beforehand (note that I should really be setting
 			// data in a model rather than just manipulating data in the

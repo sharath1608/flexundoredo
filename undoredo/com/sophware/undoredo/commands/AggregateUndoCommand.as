@@ -1,5 +1,9 @@
 package com.sophware.undoredo.commands
 {
+	import mx.collections.ArrayCollection;
+	
+	import com.adobe.cairngorm.control.CairngormEvent;
+	
 	/**
 	 * Handles a set of synchronous commands as a single undoable operation.
 	 *
@@ -19,8 +23,8 @@ package com.sophware.undoredo.commands
 	 *
 	 * <p>
 	 * The order in which the undo operation happens can be controlled by
-	 * setting the order property to either FIFO or LIFO.  The order defaults
-	 * to LIFO which is the usual order of undo operations.
+	 * setting the order property to either FIFO or LIFO.  This is needed for
+	 * operations that are not transitive.  The default order is LIFO.
 	 * </p>
 	 */
 	public class AggregateUndoCommand extends UndoCommand
@@ -40,19 +44,17 @@ package com.sophware.undoredo.commands
 
 		private var _order:String = LIFO;
 
-
-		/**
-		 * FIXME: how should I make this public?
-		 */
-		protected var _commands:ArrayCollection = new ArrayCollection();
-
+		[Bindable]
+		private var _commands:ArrayCollection = new ArrayCollection();
 
 
 		/**
 		 * Creates an AggregateUndoCommand
 		 */
-		public function AggregateUndoCommand() : void
+		public function AggregateUndoCommand( cmds : ArrayCollection = null) : void
 		{
+			if (cmds != null)
+				commands = cmds;
 		}
 
 
@@ -69,7 +71,6 @@ package com.sophware.undoredo.commands
 		 */
 		public function set order(s:String):void
 		{
-			// FIXME: check the type
 			_order = s;
 		}
 
@@ -85,7 +86,7 @@ package com.sophware.undoredo.commands
 					_commands[i].undo();
 				}
 			} else {
-				for (var i:Number=sz; i>0; i--) {
+				for (i=sz; i>0; i--) {
 					_commands[i-1].undo();
 				}
 			}
@@ -95,12 +96,29 @@ package com.sophware.undoredo.commands
 		 * Performs the redo operations in the order in which they were
 		 * provided to the AggregateUndoCommand.
 		 */
-		public override function redo( event : CairngormEvent = null ) : void {
+		public override function redo( event : CairngormEvent = null ) : void
+		{
 			// always apply redo in the same order
 			var sz:Number = _commands.length;
-			for (int i=0; i<sz; i++) {
+			for (var i:Number=0; i<sz; i++) {
 				_commands[i].redo( event );
 			}
+		}
+
+		/**
+		 * Returns the commands associated with this AggregateUndoCommand
+		 */
+		public function get commands():ArrayCollection
+		{
+			return _commands;
+		}
+
+		/**
+		 * Sets the commands associated with this AggregateUndoCommand
+		 */
+		public function set commands( cmds: ArrayCollection ) : void
+		{
+			_commands = cmds;
 		}
 	}
 }

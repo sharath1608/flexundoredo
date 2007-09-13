@@ -45,34 +45,48 @@ package com.sophware.undoredo.control
 	 */
 	public class UndoFrontController extends FrontController
 	{
+		/**
+		 * The name of the undo group as stored in the NamedObjectLocator class
+		 */
+		public static const UNDOGROUP_NAME:String = "undoGroup";
+		
+		/**
+		 * The name of the undo stack to be added to the undo group
+		 */
+		public static const UNDOSTACK_NAME:String = "defaultStack";
+		
 		private var _locator:NamedObjectLocator;
 	
 		/**
 		 * Creates a UndoFrontController.
 		 *
 		 * <p>
-		 * This will create a default undo group called "undoGroup" that may
+		 * This will create a default undo group called UNDOGROUP_NAME that may
 		 * accessed or replaced, if necessary, in the NamedObjectLocator
 		 * singleton.
 		 * </p>
 		 *
 		 * <p>
-		 * The activeStack within the "undoGroup" undo group object will be
-		 * used for all undo and redo operations.
+		 * The activeStack within the UNDOGROUP_NAME undo group object will be
+		 * used for all undo and redo operations, by default, this will be the
+		 * UNDOSTACK_NAME undo stack, which is automatically added to the
+		 * NamedObjectLocator.
 		 * </p>
 		 *
 		 * <p>
 		 * Additional undo stacks can be added to the undo group by using the
-		 * addStack() and removeStack() accessors.
+		 * addStack() and removeStack() accessors or by accessing the
+		 * NamedObjectLocator class directly and referencing the UNDOGROUP_ANME
+		 * undo group object.
 		 * </p>
 		 */
 		public function UndoFrontController()
 		{
 			super();
 			_locator = NamedObjectLocator.getInstance();
-			_locator.setObject("undoGroup", new UndoGroup());	
-			var undoGroup:UndoGroup = _locator.getObject("undoGroup") as UndoGroup;
-			undoGroup.addStack("defaultStack");
+			_locator.setObject(UNDOGROUP_NAME, new UndoGroup());	
+			var undoGroup:UndoGroup = _locator.getObject(UNDOGROUP_NAME) as UndoGroup;
+			undoGroup.addStack(UNDOSTACK_NAME);
 		}
 		
 		/**
@@ -96,14 +110,12 @@ package com.sophware.undoredo.control
 		{
 			var commandToInitialise : Class = getCommand( event.type );
 			var commandToExecute : ICommand = new commandToInitialise();
-			var undoGroup:UndoGroup = _locator.getObject("undoGroup") as UndoGroup;
+			var undoGroup:UndoGroup = _locator.getObject(UNDOGROUP_NAME) as UndoGroup;
 
 			if (commandToExecute is IUndoCommand) {
 				var cmd:IUndoCommand = commandToExecute as IUndoCommand;
 				switch (cmd.undoType) {
 					case UndoCommand.UNDOTYPE_NORMAL:
-						if (event is CairngormUndoEvent)
-							cmd.text = (event as CairngormUndoEvent).text;
 						undoGroup.activeStack.push(cmd, event);
 						break;
 					case UndoCommand.UNDOTYPE_IGNORED:
@@ -112,8 +124,6 @@ package com.sophware.undoredo.control
 					case UndoCommand.UNDOTYPE_RESET:
 						cmd.execute(event);
 						undoGroup.activeStack.clear();
-					default:
-						trace("Unknown undo type");
 				}
 			} else  {
 				//
@@ -138,7 +148,7 @@ package com.sophware.undoredo.control
 		 */
 		public function addStack( name : Object ) : Boolean
 		{
-			return _locator.getObject("undoGroup").addStack(name);
+			return _locator.getObject(UNDOGROUP_NAME).addStack(name);
 		}
 
 		/**
@@ -148,7 +158,7 @@ package com.sophware.undoredo.control
 		 */
 		public function removeStack( name : Object ) : Boolean
 		{
-			return _locator.getObject("undoGroup").removeStack(name);
+			return _locator.getObject(UNDOGROUP_NAME).removeStack(name);
 		}
 
 		/**
@@ -162,7 +172,7 @@ package com.sophware.undoredo.control
 		[Bindable]
 		public function set activeStack( name : Object ) : void
 		{
-			_locator.getObject("undoGroup").activeStack = name;
+			_locator.getObject(UNDOGROUP_NAME).activeStack = name;
 		}
 
 		/**
@@ -170,7 +180,7 @@ package com.sophware.undoredo.control
 		 */
 		public function get activeStack() : Object
 		{
-			return _locator.getObject("undoGroup").activeStack;
+			return _locator.getObject(UNDOGROUP_NAME).activeStack;
 		}
 
 	}

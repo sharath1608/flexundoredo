@@ -10,15 +10,20 @@ package com.sophware.undoredo.control
 	 */
 	public class CairngormUndoEvent extends CairngormEvent
 	{
+		/**
+		 * A String that may be used as the event type when working with the
+		 * FrontController.
+		 */
+		public static const EVENT_TYPE:String = "cairngorm_undo_event";
+		
 		private var _text:String;
 		
 		/**
 		 * Creates a CairngormUndoEvent
 		 */
-		public function CairngormUndoEvent(text:String, type:String, bubbles:Boolean=false, cancelable:Boolean=false)
+		public function CairngormUndoEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false)
 		{
 			super(type, bubbles, cancelable);
-			_text = text;
 		}
 		
 		/**

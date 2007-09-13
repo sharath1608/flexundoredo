@@ -12,8 +12,8 @@ package com.sophware.undoredo.commands
 	 * UndoFrontController.
 	 * 
 	 * <p>
-	 * This command will perform an undo or a redo based on the operation
-	 * of the event in question.
+	 * This command will perform an undo or a redo as determined from the
+	 * event type, which can be either UNDO or REDO.
 	 * </p>
 	 */
 	public class UndoStackCommand extends UndoCommand
@@ -23,7 +23,6 @@ package com.sophware.undoredo.commands
 			undoType = UndoCommand.UNDOTYPE_IGNORED;
 		}
 		
-		
 		/**
 		 * Executes an undo or redo operation based on event.operation.
 		 * 
@@ -32,6 +31,7 @@ package com.sophware.undoredo.commands
 		 * UndoStackEvent then no operation will be performed.  The operation
 		 * is performed against the active undo stack used by the undo front
 		 * controller.
+		 * </p>
 		 */
 		public override function execute(event:CairngormEvent):void
 		{
@@ -40,7 +40,7 @@ package com.sophware.undoredo.commands
 				return;
 			
 			var undoGroup:UndoGroup = NamedObjectLocator.getInstance().getObject("undoGroup") as UndoGroup
-			if (e.operation == UndoStackEvent.OPERATION_UNDO) {
+			if (e.type == UndoStackEvent.UNDO) {
 				undoGroup.activeStack.undo();
 			} else
 				undoGroup.activeStack.redo();

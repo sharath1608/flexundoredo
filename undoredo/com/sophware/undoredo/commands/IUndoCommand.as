@@ -28,10 +28,10 @@ package com.sophware.undoredo.commands
 		 * </p>
 		 *
 		 * <p>
-		 * redo() will be called when an event is pushed onto the stack, thus,
+		 * redo() will be called when an command is pushed onto the stack, thus,
 		 * it is the redo() function that will initially make changes to the
 		 * model, etc.  redo() is expected to store the necessary data to be
-		 * able to undo the operation when undo() is called.
+		 * able to redo the operation after undo() is called.
 		 * </p>
 		 * 
 		 * <p>

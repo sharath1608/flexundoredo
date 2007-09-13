@@ -83,7 +83,7 @@ package com.sophware.undoredo.commands
 		/**
 		 * Execute is called by the front controller and is only used for the
 		 * initial set of modifications.  This normally does not need to be
-		 * overridden as it calls redo() which will perform the necessary
+		 * overridden as it calls redo() which generally performs the necessary
 		 * changes.  If the event type is CairngormUndoEvent, before calling
 		 * redo, it will set the text of the undo command based on the text
 		 * property of the event.

@@ -24,8 +24,9 @@ package tests.com.sophware.undoredo.control
 			super();
 			if (_controller == null) {
 				_controller = new UndoFrontController();
-				_controller.addCommand(SampleAppendEvent.EVENT_NAME, SampleStringCommand);
-				_controller.addCommand("UNDO_STACK_EVENT", UndoStackCommand);
+				_controller.addCommand(SampleAppendEvent.APPEND, SampleStringCommand);
+				_controller.addCommand(UndoStackEvent.UNDO, UndoStackCommand);
+				_controller.addCommand(UndoStackEvent.REDO, UndoStackCommand);
 			}
 		}
 		
@@ -69,8 +70,7 @@ package tests.com.sophware.undoredo.control
 				);
 
 			// invoke a redo operation that I will test against
-			var redo:UndoStackEvent = new UndoStackEvent();
-			redo.operation = UndoStackEvent.OPERATION_REDO;
+			var redo:UndoStackEvent = new UndoStackEvent(UndoStackEvent.REDO);
 			CairngormEventDispatcher.getInstance().dispatchEvent( redo );
 
 			// create a closure that will be used to test the object
@@ -111,7 +111,7 @@ package tests.com.sophware.undoredo.control
 
 		private function invokeAppendCommand():SampleAppendEvent
 		{
-			var event:SampleAppendEvent = new SampleAppendEvent("append", "first","second");
+			var event:SampleAppendEvent = new SampleAppendEvent("first","second");
 
 			// test the value beforehand (note that I should really be setting
 			// data in a model rather than just manipulating data in the

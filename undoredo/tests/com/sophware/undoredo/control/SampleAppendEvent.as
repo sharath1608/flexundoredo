@@ -5,11 +5,12 @@ package tests.com.sophware.undoredo.control
 
 	public class SampleAppendEvent extends CairngormUndoEvent
 	{
-		public static var EVENT_NAME:String = "append";
+		public static const APPEND:String = "sample_append_event";
 		
-		public function SampleAppendEvent(text:String, value:String, appendText:String):void
+		public function SampleAppendEvent(value:String, appendText:String):void
 		{
-			super(text, EVENT_NAME);
+			super(APPEND);
+			text = "append";
 			data = {
 				value:value,
 				appendText:appendText

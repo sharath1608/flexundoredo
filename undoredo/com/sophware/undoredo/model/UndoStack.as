@@ -11,10 +11,10 @@ package com.sophware.undoredo.model
 	 * 
 	 * <p>
 	 * The UndoStack contains a list of undo commands.  Each command can be
-	 * undone or be redone.  If after an series of undo operations, a new
-	 * event is pushed onto the undo stack, all events that had not yet been
-	 * redone are deleted from the stack and the new operation is pushed onto
-	 * the stack.
+	 * undone or be redone.  If after a series of undo operations, a new
+	 * event is pushed onto the undo stack (thus invalidating the events that
+	 * are left to be redone), all events that had not yet been redone are 
+	 * deleted from the stack and the new operation is pushed onto the stack.
 	 * </p>
 	 * 
 	 * <p>
@@ -78,19 +78,25 @@ package com.sophware.undoredo.model
 		 * Pushes \a cmd onto the UndoStack and executes the command.  The
 		 * command will attempt to be merged with the prior command.
 		 * 
+		 * <p>
 		 * The command will be executed with its execute() method when pushed.
 		 * The execute method should generally delegate to the redo() method
 		 * which will be called for subsequent redo operations.
+		 * </p>
 		 * 
+		 * <p>
 		 * If the id for the cmd is non-negative and the id for the prior
 		 * command and the command being pushed onto the stack are the same
 		 * then OldCmd.mergeWith() will be called.  If OldCmd.mergeWith()
 		 * returns true then the new command is deleted after it's associated
 		 * action is performed.
-		 *
+		 * </p>
+		 * 
+		 * <p>
 		 * If previous operations had been undone but not redone, all commands
 		 * after the command at index() will be deleted.
-		 *
+		 * </p>
+		 * 
 		 * @param cmd The command being pushed onto the stack
 		 * @param event The payload for the command being pushed onto the stack
 		 */

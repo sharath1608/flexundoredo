@@ -13,37 +13,24 @@ package com.sophware.undoredo.control
 	 */
 	public class UndoStackEvent extends CairngormEvent
 	{
-		
 		/**
-		 * The type of event
+		 * Event type for an undo operation
 		 */
-		public static const UNDOSTACK:String = "undostack"
+		public static const UNDO:String = "undo_stack_event_undo";
 		
 		/**
-		 * Indicates that an undo operation is to be performed
+		 * Event type for a redo operation
 		 */
-		public static const OPERATION_UNDO:String = "undo";
+		public static const REDO:String = "undo_stack_event_redo";
 		
 		/**
-		 * Indicates that a redo operation is going to be performed
-		 */
-		public static const OPERATION_REDO:String = "redo";
-		
-		/**
-		 * The operation being performed.  Should be either OPERATION_UNDO
-		 * or OPERATION_REDO.
-		 */
-		public var operation:String;
-		
-		/**
-		 * Creates an undo event that defaults to the undo operation
+		 * Creates an undo/redo event that defaults to the undo operation
 		 * 
 		 * @param op Specifies the operation type
 		 */
-		public function UndoStackEvent(op:String = OPERATION_UNDO)
+		public function UndoStackEvent(op:String = UNDO)
 		{
-			super("UNDO_STACK_EVENT");
-			operation = op;
+			super(op);
 		}
 	}
 }

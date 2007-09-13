@@ -30,10 +30,9 @@ package tests.com.sophware.undoredo.commands
 				return;
 
 			var e:SampleMatrixEvent = event as SampleMatrixEvent;
-			var p:Point = e.data.point as Point;
 			
 			// apply the matrix transformation to the point
-			e.data.point = _m.transformPoint(p);
+			e.data.point = _m.transformPoint(e.data.point);
 		
 			// store it for the undo operation
 			o = e.data;
@@ -41,10 +40,8 @@ package tests.com.sophware.undoredo.commands
 
 		public override function undo() : void
 		{
-			var p:Point = o.point as Point;
-			
 			// apply the inverse of the matrix transformation to the point
-			o.point = _i.transformPoint(p);
+			o.point = _i.transformPoint(o.point as Point);
 		}
 	}
 }

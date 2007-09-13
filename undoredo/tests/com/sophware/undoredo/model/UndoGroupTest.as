@@ -24,8 +24,10 @@ package tests.com.sophware.undoredo.model
 		{
 			var cmd:UndoCommand = new UndoCommand();
 			var cmd2:UndoCommand = new UndoCommand();
-			var evt:SampleAppendEvent = new SampleAppendEvent("event1", "orig", "appended");
-			var evt2:SampleAppendEvent = new SampleAppendEvent("event2", "orig2", "appended2");
+			var evt:SampleAppendEvent = new SampleAppendEvent("orig", "appended");
+			evt.text = "event1";
+			var evt2:SampleAppendEvent = new SampleAppendEvent("orig2", "appended2");
+			evt2.text = "event2";
 			
 			ug.activeStack.push(cmd, evt);
 			assertEquals("event1", ug.activeStack.undoText);
@@ -53,8 +55,10 @@ package tests.com.sophware.undoredo.model
 		{
 			var cmd:UndoCommand = new UndoCommand();
 			var cmd2:UndoCommand = new UndoCommand();
-			var evt:SampleAppendEvent = new SampleAppendEvent("event1", "orig", "appended");
-			var evt2:SampleAppendEvent = new SampleAppendEvent("event2", "orig2", "appended2");
+			var evt:SampleAppendEvent = new SampleAppendEvent("orig", "appended");
+			evt.text = "event1";
+			var evt2:SampleAppendEvent = new SampleAppendEvent("orig2", "appended2");
+			evt2.text = "event2";
 			
 			ug.activeStack.push(cmd, evt);
 			assertEquals("event1", ug.activeStack.undoText);
@@ -82,8 +86,10 @@ package tests.com.sophware.undoredo.model
 		{
 			var cmd:UndoCommand = new UndoCommand();
 			var cmd2:UndoCommand = new UndoCommand();
-			var evt:SampleAppendEvent = new SampleAppendEvent("event1", "orig", "appended");
-			var evt2:SampleAppendEvent = new SampleAppendEvent("event2", "orig2", "appended2");
+			var evt:SampleAppendEvent = new SampleAppendEvent("orig", "appended");
+			evt.text = "event1";
+			var evt2:SampleAppendEvent = new SampleAppendEvent("orig2", "appended2");
+			evt2.text = "event2";
 
 			// verify on the default stack
 			assertFalse(ug.activeStack.canUndo);
@@ -111,8 +117,10 @@ package tests.com.sophware.undoredo.model
 		{
 			var cmd:UndoCommand = new UndoCommand();
 			var cmd2:UndoCommand = new UndoCommand();
-			var evt:SampleAppendEvent = new SampleAppendEvent("event1", "orig", "appended");
-			var evt2:SampleAppendEvent = new SampleAppendEvent("event2", "orig2", "appended2");
+			var evt:SampleAppendEvent = new SampleAppendEvent("orig", "appended");
+			evt.text = "event1";
+			var evt2:SampleAppendEvent = new SampleAppendEvent("orig2", "appended2");
+			evt2.text = "event2";
 
 			assertFalse(ug.activeStack.canRedo);
 			ug.activeStack.push(cmd, evt);

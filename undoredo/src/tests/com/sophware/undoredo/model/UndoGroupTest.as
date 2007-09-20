@@ -166,6 +166,29 @@ package tests.com.sophware.undoredo.model
 			assertTrue(ug.hasStack("test"));
 		}
 
-		
+		public function testIsClean():void
+		{
+			var cmd:UndoCommand = new UndoCommand();
+			var evt:SampleAppendEvent = new SampleAppendEvent("orig", "appended");
+			evt.text = "event1";
+			
+			assertTrue(ug.isClean());
+			assertTrue(ug.activeStack.isClean());
+			
+			ug.activeStack.push(cmd, evt);
+			
+			assertFalse(ug.isClean());
+			assertFalse(ug.activeStack.isClean());
+			
+			ug.activeStack.undo();
+			
+			assertTrue(ug.isClean());
+			assertTrue(ug.activeStack.isClean());
+			
+			ug.activeStack.redo();
+			
+			assertFalse(ug.isClean());
+			assertFalse(ug.activeStack.isClean());
+		}
 	}
 }

@@ -94,5 +94,39 @@ package tests.com.sophware.undoredo.model
 			assertEquals( "testCmd", us.redoText );
 		}
 		
+		public function testIsClean():void
+		{
+			var cmd1:UndoCommand = new UndoCommand();
+			var cmd2:UndoCommand = new UndoCommand();
+			cmd1.text = "testCmd";
+			cmd2.text = "otherCmd";
+			
+			// make sure it's clean by default
+			assertEquals(true, us.isClean());
+			
+			// push something, make sure it's no longer clean
+			us.push(cmd1);
+			assertEquals(false, us.isClean());
+			
+			us.undo();
+			assertEquals(true, us.isClean());
+			
+			us.redo();
+			assertEquals(false, us.isClean());
+			
+			// make the new index clean
+			us.setClean();
+			assertEquals(true, us.isClean());
+			
+			us.push(cmd2);
+			assertEquals(false, us.isClean());
+			
+			us.undo();
+			assertEquals(true, us.isClean());
+		
+			us.undo();
+			assertEquals(false, us.isClean());
+		}
+		
 	}
 }

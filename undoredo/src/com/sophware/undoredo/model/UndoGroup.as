@@ -32,6 +32,7 @@ package com.sophware.undoredo.model
 		public function UndoGroup():void
 		{
 			_stacks = new Dictionary();	
+			_currentStack = null;
 		}
 
 
@@ -118,7 +119,12 @@ package com.sophware.undoredo.model
 		}
 
 		/**
-		 * Returns the active undo stack
+		 * Returns the active undo stack as long as one stack has been added.
+		 *
+		 * <p>
+		 * An error will occur if a stack has not yet been added to the undo
+		 * group.
+		 * </p>
 		 */
 		public function get activeStack() : UndoStack
 		{
@@ -136,6 +142,7 @@ package com.sophware.undoredo.model
 		 * </p>
 		 * 
 		 * @param name The name of the undo stack to be made active
+		 * @return True if a new active stack has been set
 		 */
 		public function setActiveStack( name : Object ) : Boolean
 		{
@@ -144,6 +151,14 @@ package com.sophware.undoredo.model
 			_currentStack = name;
 			return true;
 			
+		}
+
+		/**
+		 * Returns true if the active stack is clean
+		 */
+		public function get isClean() : Boolean
+		{
+			return activeStack.isClean;
 		}
 
 	}

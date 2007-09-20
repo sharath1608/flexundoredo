@@ -216,7 +216,7 @@ package com.sophware.undoredo.model
 				var cnt:Number = count;
 				do {
 					redo();
-				} while (ix > _stackIndex && _stackIndex);
+				} while (ix > _stackIndex);
 			} // else no change
 		}
 

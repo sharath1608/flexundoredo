@@ -11,8 +11,8 @@
 			
 			import tests.com.sophware.undoredo.model.UndoStackTest;
 			import tests.com.sophware.undoredo.model.UndoGroupTest;
-			import tests.com.sophware.undoredo.commands.UndoCommandTest;
 			import tests.com.sophware.undoredo.control.UndoFrontControllerTest;
+			import tests.com.sophware.undoredo.commands.UndoCommandTest;
 			import tests.com.sophware.undoredo.commands.AggregateUndoCommandTest;
 			
 			private function runTests():void {

@@ -172,23 +172,23 @@ package tests.com.sophware.undoredo.model
 			var evt:SampleAppendEvent = new SampleAppendEvent("orig", "appended");
 			evt.text = "event1";
 			
-			assertTrue(ug.isClean());
-			assertTrue(ug.activeStack.isClean());
+			assertTrue(ug.isClean);
+			assertTrue(ug.activeStack.isClean);
 			
 			ug.activeStack.push(cmd, evt);
 			
-			assertFalse(ug.isClean());
-			assertFalse(ug.activeStack.isClean());
+			assertFalse(ug.isClean);
+			assertFalse(ug.activeStack.isClean);
 			
 			ug.activeStack.undo();
 			
-			assertTrue(ug.isClean());
-			assertTrue(ug.activeStack.isClean());
+			assertTrue(ug.isClean);
+			assertTrue(ug.activeStack.isClean);
 			
 			ug.activeStack.redo();
 			
-			assertFalse(ug.isClean());
-			assertFalse(ug.activeStack.isClean());
+			assertFalse(ug.isClean);
+			assertFalse(ug.activeStack.isClean);
 		}
 	}
 }

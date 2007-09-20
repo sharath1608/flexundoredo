@@ -102,30 +102,30 @@ package tests.com.sophware.undoredo.model
 			cmd2.text = "otherCmd";
 			
 			// make sure it's clean by default
-			assertEquals(true, us.isClean());
+			assertEquals(true, us.isClean);
 			
 			// push something, make sure it's no longer clean
 			us.push(cmd1);
-			assertEquals(false, us.isClean());
+			assertEquals(false, us.isClean);
 			
 			us.undo();
-			assertEquals(true, us.isClean());
+			assertEquals(true, us.isClean);
 			
 			us.redo();
-			assertEquals(false, us.isClean());
+			assertEquals(false, us.isClean);
 			
 			// make the new index clean
 			us.setClean();
-			assertEquals(true, us.isClean());
+			assertEquals(true, us.isClean);
 			
 			us.push(cmd2);
-			assertEquals(false, us.isClean());
+			assertEquals(false, us.isClean);
 			
 			us.undo();
-			assertEquals(true, us.isClean());
+			assertEquals(true, us.isClean);
 		
 			us.undo();
-			assertEquals(false, us.isClean());
+			assertEquals(false, us.isClean);
 		}
 		
 	}

@@ -84,6 +84,12 @@ package com.sophware.undoredo.model
 		 * be returned.  The current command is not always the top-most
 		 * command on the stack as other commands may have been undone.
 		 * </p>
+		 *
+		 * <p>
+		 * The index is a zero based index that should be between zero and
+		 * count - 1, inclusive.  An index of -1 implies that no entries are
+		 * available on the undo stack.
+		 * </p>
 		 */
 		public function get index():Number
 		{
@@ -138,7 +144,11 @@ package com.sophware.undoredo.model
 
 
 		/**
-		 * Returns the text associated with the next redo command
+		 * Returns the text associated with the next redo command.
+		 *
+		 * <p>
+		 * An empty string is returned if no no redoable events are available.
+		 * </p>
 		 */
 		public function get redoText():String
 		{
@@ -149,6 +159,11 @@ package com.sophware.undoredo.model
 
 		/**
 		 * Returns the undo text associated with \a index
+		 *
+		 * <p>
+		 * If \a index is valid, then the text associated with that text is
+		 * returned, otherwise the empty string is returned.
+		 * </p>
 		 * 
 		 * @param index A non-negative index number
 		 */
@@ -162,6 +177,10 @@ package com.sophware.undoredo.model
 
 		/**
 		 * Returns the undo text for the next undo command
+		 *
+		 * <p>
+		 * An empty string is returned if no no undoable events are available.
+		 * </p>
 		 */
 		public function get undoText():String
 		{
@@ -176,7 +195,7 @@ package com.sophware.undoredo.model
 		 */
 		public function undo():void
 		{
-			if (!_stack.length)
+			if (!canUndo)
 				return;
 			_stack[_stackIndex].undo();
 			_stackIndex--;

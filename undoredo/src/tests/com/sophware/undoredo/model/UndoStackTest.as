@@ -54,6 +54,59 @@ package tests.com.sophware.undoredo.model
 			assertEquals( 0, us.index );
 		}
 
+		public function testTooManyUndoes():void
+		{
+			var cmd:UndoCommand = new UndoCommand();
+			assertFalse(us.canRedo);
+			assertFalse(us.canUndo);
+			us.push(cmd);
+			assertFalse(us.canRedo);
+			assertTrue(us.canUndo);
+			us.undo();
+			assertFalse(us.canUndo);
+			assertTrue(us.canRedo);
+			
+			// this shouldn't change the ability to undo/redo
+			us.undo();
+			us.undo();
+			assertFalse(us.canUndo);
+			assertTrue(us.canRedo);
+	
+			us.redo();
+			
+			assertFalse(us.canRedo);
+			assertTrue(us.canUndo);
+		}
+
+		public function testTooManyRedoes():void
+		{
+			var cmd:UndoCommand = new UndoCommand();
+			us.push(cmd);
+			assertFalse(us.canRedo);
+			assertTrue(us.canUndo);
+			us.undo();
+			assertFalse(us.canUndo);
+			assertTrue(us.canRedo);
+			
+			us.redo();
+			
+			assertFalse(us.canRedo);
+			assertTrue(us.canUndo);
+
+			// these shouldn't affect the undo/redo status and should not cause
+			// a crash of any sort
+			us.redo();
+			us.redo();
+			
+			assertFalse(us.canRedo);
+			assertTrue(us.canUndo);
+
+			us.undo();
+			
+			assertFalse(us.canUndo);
+			assertTrue(us.canRedo);
+		}
+
 		public function testSetIndex():void
 		{
 			var cmd:UndoCommand = new UndoCommand();

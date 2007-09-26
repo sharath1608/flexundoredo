@@ -3,10 +3,16 @@ package tests.com.sophware.undoredo.model
 	import flexunit.framework.TestCase;
 	import com.sophware.undoredo.model.UndoStack;
 	import com.sophware.undoredo.commands.UndoCommand;
-	
+
+	import mx.binding.utils.BindingUtils;
+
 	public class UndoStackTest extends TestCase
 	{
 		private var us:UndoStack;
+
+		[Bindable] public var bool:Boolean;
+		[Bindable] public var text:String;
+		[Bindable] public var index:Number;
 		
 		public override function setUp():void
 		{
@@ -20,6 +26,21 @@ package tests.com.sophware.undoredo.model
 			assertTrue(us.canUndo);
 		}
 		
+		public function testCanUndoBinding():void
+		{
+			// make canUndo notify about all changes 
+			BindingUtils.bindProperty(this, "bool", us, "canUndo");
+
+			assertFalse(us.canUndo);
+			assertFalse(bool);
+
+			us.push(new UndoCommand());
+			
+			assertTrue(us.canUndo);
+			assertTrue(bool);
+		}
+
+	
 		public function testCanRedo():void
 		{
 			assertFalse(us.canRedo);
@@ -27,15 +48,38 @@ package tests.com.sophware.undoredo.model
 			us.undo();
 			assertTrue(us.canRedo);
 		}
+
+		public function testCanRedoBinding():void
+		{
+			// make canRedo notify about all changes 
+			BindingUtils.bindProperty(this, "bool", us, "canRedo");
+			
+			assertFalse(us.canRedo);
+			assertFalse(bool);
+
+			us.push(new UndoCommand());
+			us.undo();
+
+			assertTrue(us.canRedo);
+			assertTrue(bool);
+		}
 		
 		public function testClear():void
 		{
+			// make canUndo notify about all changes 
+			BindingUtils.bindProperty(this, "bool", us, "canUndo");
+
 			us.push(new UndoCommand());
+
 			assertEquals( 1, us.count );
 			assertTrue(us.canUndo);
+			assertTrue(bool);
+
 			us.clear();
+			
 			assertEquals( 0, us.count );
 			assertFalse(us.canUndo);
+			assertFalse(bool);
 		}
 		
 		public function testCount():void
@@ -47,11 +91,15 @@ package tests.com.sophware.undoredo.model
 		
 		public function testGetIndex():void
 		{
+			BindingUtils.bindProperty(this, "index", us, "index");
+
 			var cmd:UndoCommand = new UndoCommand();
 			cmd.text = "testCmd";
 			assertEquals( -1, us.index );
+			assertEquals( -1, index );
 			us.push(cmd);
 			assertEquals( 0, us.index );
+			assertEquals( 0, index );
 		}
 
 		public function testTooManyUndos():void
@@ -109,6 +157,8 @@ package tests.com.sophware.undoredo.model
 
 		public function testSetIndex():void
 		{
+			BindingUtils.bindProperty(this, "bool", us, "canRedo");
+
 			var cmd:UndoCommand = new UndoCommand();
 			cmd.text = "testCmd";
 			assertEquals( -1, us.index );
@@ -122,17 +172,21 @@ package tests.com.sophware.undoredo.model
 			assertEquals( 3, us.index );
 			
 			assertFalse(us.canRedo);
+			assertFalse(bool);
 
 			// undo events as necessary
 			us.index = 1;
 			
 			assertEquals( 1, us.index );
 			assertTrue(us.canRedo);
+			assertTrue(bool);
 
 			us.redo();
 			assertTrue(us.canRedo);
+			assertTrue(bool);
 			us.redo();
 			assertFalse(us.canRedo);
+			assertFalse(bool);
 		}
 		
 		public function testText():void
@@ -144,98 +198,126 @@ package tests.com.sophware.undoredo.model
 			
 			us.push(cmd1);
 			us.push(cmd2);
+
 			assertEquals("testCmd", us.text(0) );
 			assertEquals("otherCmd", us.text(1) );
 		}
 		
 		public function testUndoText():void
 		{
+			BindingUtils.bindProperty(this, "text", us, "undoText");
+			
 			var cmd1:UndoCommand = new UndoCommand();
 			var cmd2:UndoCommand = new UndoCommand();
 			cmd1.text = "testCmd";
 			cmd2.text = "otherCmd";
-			
+		
 			assertEquals( "", us.undoText );
+			assertEquals( "", text);
 			us.push(cmd1);
 			assertEquals( "testCmd", us.undoText );
+			assertEquals( "testCmd", text );
 			us.push(cmd2);
 			assertEquals( "otherCmd", us.undoText );
+			assertEquals( "otherCmd", text );
 			us.undo();
 			assertEquals( "testCmd", us.undoText );
+			assertEquals( "testCmd", text );
 		}
 		
 		public function testRedoText():void
 		{
+			BindingUtils.bindProperty(this, "text", us, "redoText");
+			
 			var cmd1:UndoCommand = new UndoCommand();
 			var cmd2:UndoCommand = new UndoCommand();
 			cmd1.text = "testCmd";
 			cmd2.text = "otherCmd";
 			
 			assertEquals( "", us.redoText );
+			assertEquals( "", text );
 			
 			us.push(cmd1);
 			us.push(cmd2);
 
 			assertEquals( "", us.redoText );
+			assertEquals( "", text );
 			
 			us.undo();
 			assertEquals( "otherCmd", us.redoText );
+			assertEquals( "otherCmd", text );
 			us.undo();
 			assertEquals( "testCmd", us.redoText );
+			assertEquals( "testCmd", text );
 		}
 		
 		public function testIsClean():void
 		{
+			BindingUtils.bindProperty(this, "bool", us, "clean");
+
 			var cmd1:UndoCommand = new UndoCommand();
 			var cmd2:UndoCommand = new UndoCommand();
 			cmd1.text = "testCmd";
 			cmd2.text = "otherCmd";
 			
 			// make sure it's clean by default
-			assertTrue(us.isClean);
-			
+			assertTrue(us.clean);
+			assertTrue(bool);
+
 			// push something, make sure it's no longer clean
 			us.push(cmd1);
-			assertFalse(us.isClean);
+			assertFalse(us.clean);
+			assertFalse(bool);
 			
 			us.undo();
-			assertTrue(us.isClean);
+			assertTrue(us.clean);
+			assertTrue(bool);
 			
 			us.redo();
-			assertFalse(us.isClean);
+			assertFalse(us.clean);
+			assertFalse(bool);
 			
 			// make the new index clean
-			us.setClean();
-			assertTrue(us.isClean);
+			us.clean = true;
+			assertTrue(us.clean);
+			assertTrue(bool);
 			
 			us.push(cmd2);
-			assertFalse(us.isClean);
+			assertFalse(us.clean);
+			assertFalse(bool);
 			
 			us.undo();
-			assertTrue(us.isClean);
+			assertTrue(us.clean);
+			assertTrue(bool);
 		
 			us.undo();
-			assertFalse(us.isClean);
+			assertFalse(us.clean);
+			assertFalse(bool);
 
 			// now that I have a couple redo actions pending, make sure that
 			// the clean status is reset when a command is pushed onto the
 			// stack
 			us.push(cmd2);
-			assertFalse(us.isClean);
+			assertFalse(us.clean);
+			assertFalse(bool);
 		}
 		
 		public function testCleanIndex():void
 		{
+			BindingUtils.bindProperty(this, "index", us, "cleanIndex");
+
 			var cmd:UndoCommand = new UndoCommand();
 			
 			assertEquals(-1, us.cleanIndex);
+			assertEquals(-1, index);
 			
 			us.push(cmd);
 
 			// make sure the clean index is really representative of the value
-			// when I call setClean()
-			us.setClean();
+			// when I call clean = true
+			us.clean = true;
 			assertEquals(0, us.cleanIndex);
+			assertEquals(0, index);
 
 			cmd = new UndoCommand();
 
@@ -245,10 +327,12 @@ package tests.com.sophware.undoredo.model
 			// pending redo events were waiting... so the index should be the
 			// same
 			assertEquals(0, us.cleanIndex);
+			assertEquals(0, index);
 
 			us.undo();
 			us.undo();
 			assertEquals(0, us.cleanIndex);
+			assertEquals(0, index);
 			
 			cmd = new UndoCommand();
 			
@@ -256,6 +340,7 @@ package tests.com.sophware.undoredo.model
 			// the cleanIndex
 			us.push(cmd);
 			assertEquals(-1, us.cleanIndex);
+			assertEquals(-1, index);
 
 		}
 	}

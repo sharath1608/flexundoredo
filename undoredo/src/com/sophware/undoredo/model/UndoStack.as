@@ -1,5 +1,7 @@
 package com.sophware.undoredo.model
 {
+	import flash.events.Event;
+	import flash.events.EventDispatcher;
 	import mx.collections.ArrayCollection;
 	
 	import com.adobe.cairngorm.control.CairngormEvent;
@@ -25,34 +27,45 @@ package com.sophware.undoredo.model
 	 * </p>
 	 *
 	 */
-	public class UndoStack
+	public class UndoStack extends EventDispatcher
 	{
+		// are used for internal operations
 		private var _stack:ArrayCollection = new ArrayCollection();
-		
-		[Bindable]
-		private var _stackIndex:Number = -1;
-		[Bindable]
 		private var _cleanIndex:Number = -1;
+		
+		// should only be used by associated getter/setter 
+		private var __stackIndex:Number = -1;
+
+		/**
+		 * Creates an UndoStack
+		 */
+		public function UndoStack():void
+		{
+			// nothing special
+		}
+
 
 		/**
 		 * True if an undoable event is present on the stack
 		 */
+		[Bindable("indexChanged")]
 		public function get canUndo():Boolean
 		{
-			return _stackIndex >= 0;
+			return stackIndex >= 0;
 		}
-		
+
 
 		/**
 		 * True if a redo operation can be performed
 		 */
+		[Bindable("indexChanged")]
 		public function get canRedo():Boolean
 		{
-			// note, if all undo events have been undone, than _stackIndex
+			// note, if all undo events have been undone, than stackIndex
 			// will be -1 but stack.length will be greater than zero.  If
-			// there aren't yet any undo events, then _stackIndex (-1) + 1
+			// there aren't yet any undo events, then stackIndex (-1) + 1
 			// will be equal to the size of the stack, so this should work.
-			return _stackIndex + 1 < _stack.length;
+			return stackIndex + 1 < _stack.length;
 		}
 		
 
@@ -62,8 +75,8 @@ package com.sophware.undoredo.model
 		public function clear():void
 		{
 			_stack = new ArrayCollection();
-			_stackIndex = -1;
-			_cleanIndex = -1;
+			stackIndex = -1;
+			setCleanIndex(-1);
 		}
 
 		/**
@@ -91,9 +104,10 @@ package com.sophware.undoredo.model
 		 * available on the undo stack.
 		 * </p>
 		 */
+		[Bindable("indexChanged")]
 		public function get index():Number
 		{
-			return _stackIndex;
+			return stackIndex;
 		}
 	
 		
@@ -127,14 +141,16 @@ package com.sophware.undoredo.model
 			
 			if (canRedo) {
 				// clear the clean index if necessary
-				if (_cleanIndex > _stackIndex)
-					_cleanIndex = -1;
+				if (_cleanIndex > stackIndex)
+					setCleanIndex(-1);
 				
 				// delete all the currently redoable events
-				removeCmds(_stackIndex + 1, _stack.length);
+				removeCmds(stackIndex + 1, _stack.length);
 			}
 			
-			if (_stackIndex < 0 || !_stack[_stackIndex].mergeWith(cmd)) {
+			// if there aren't any undoable events to merge with or I
+			// can't merge, then push the command
+			if (stackIndex < 0 || !_stack[stackIndex].mergeWith(cmd)) {
 				addUndoCmd(cmd);
 			}
 			
@@ -149,10 +165,11 @@ package com.sophware.undoredo.model
 		 * An empty string is returned if no no redoable events are available.
 		 * </p>
 		 */
+		[Bindable("indexChanged")]
 		public function get redoText():String
 		{
 			if (canRedo)
-				return _stack[_stackIndex+1].text;
+				return _stack[stackIndex+1].text;
 			return "";
 		}
 
@@ -181,10 +198,11 @@ package com.sophware.undoredo.model
 		 * An empty string is returned if no no undoable events are available.
 		 * </p>
 		 */
+		[Bindable("indexChanged")]
 		public function get undoText():String
 		{
 			if (canUndo)
-				return _stack[_stackIndex].text;
+				return _stack[stackIndex].text;
 			return "";
 		}
 
@@ -196,8 +214,8 @@ package com.sophware.undoredo.model
 		{
 			if (!canUndo)
 				return;
-			_stack[_stackIndex].undo();
-			_stackIndex--;
+			_stack[stackIndex].undo();
+			stackIndex--;
 		}
 
 		
@@ -208,8 +226,8 @@ package com.sophware.undoredo.model
 		{
 			if (!canRedo)
 				return;
-			_stack[_stackIndex+1].redo();
-			_stackIndex++;
+			_stack[stackIndex+1].redo();
+			stackIndex++;
 		}
 
 		
@@ -224,17 +242,17 @@ package com.sophware.undoredo.model
 			if (!isValidIndex(ix))
 				return;
 
-			if (ix < _stackIndex) {
+			if (ix < stackIndex) {
 				// perform undoes
 				do {
 					undo();
-				} while (ix < _stackIndex && _stackIndex >= 0);
-			} else if (ix > _stackIndex) {
+				} while (ix < stackIndex && stackIndex >= 0);
+			} else if (ix > stackIndex) {
 				// perform redoes
 				var cnt:Number = count;
 				do {
 					redo();
-				} while (ix > _stackIndex);
+				} while (ix > stackIndex);
 			} // else no change
 		}
 
@@ -244,16 +262,17 @@ package com.sophware.undoredo.model
 		 * 
 		 * <p>
 		 * The stack is considered clean if the current index is the index at
-		 * which setClean() was last called.  The stack is clean by default.
+		 * which clean = true was last called.  The stack is clean by default.
 		 * </p>
 		 */
-		public function get isClean():Boolean
+		[Bindable("cleanChanged")]
+		public function get clean():Boolean
 		{
 			return cleanIndex == index;
 		}
 
 		/**
-		 * Sets the clean index to the current index.
+		 * Sets the clean index to the current index if set to a true value.
 		 *
 		 * <p>
 		 * The clean index will be reset if the clean index is higher than the
@@ -262,15 +281,19 @@ package com.sophware.undoredo.model
 		 * the stack.)  The cleanIndex is set to -1 in the event of a reset.
 		 * </p>
 		 */
-		public function setClean():void
+		public function set clean(b:Boolean):void
 		{
-			_cleanIndex = index;
+			if (!b)
+				return;
+
+			setCleanIndex(index);
 		}
 
 		/**
 		 * Returns the index at which setClean was last called, or -1
 		 * if it has not been called or has been reset.
 		 */
+		[Bindable("cleanChanged")]
 		public function get cleanIndex():Number
 		{
 			return _cleanIndex;
@@ -302,7 +325,7 @@ package com.sophware.undoredo.model
 		protected function addUndoCmd(cmd:IUndoCommand):void
 		{
 			_stack.addItem(cmd);
-			_stackIndex++;
+			stackIndex++;
 		}
 
 		/**
@@ -313,7 +336,7 @@ package com.sophware.undoredo.model
 		protected function removeUndoCmd():void
 		{
 			_stack.removeItemAt(_stack.length - 1);
-			_stackIndex--;
+			stackIndex--;
 		}
 
 		/**
@@ -323,12 +346,12 @@ package com.sophware.undoredo.model
 		 * index (exclusive).
 		 *
 		 * <p>
- 		 * It is assumed that _stackIndex is already set to something
+ 		 * It is assumed that stackIndex is already set to something
 		 * lower than the entries being removed, thus it is safe to perform
 		 * this operation.  It will normally be used after a series of undo
 		 * events have been performed and then a new undo event is pushed onto
 		 * the stack, thus removing all the entries that are currently after
-		 * the current _stackIndex
+		 * the current stackIndex
 		 * </p>
 		 * 
 		 * @param start The starting index, included in removal
@@ -343,6 +366,51 @@ package com.sophware.undoredo.model
 			while (ix < end) {
 				_stack.removeItemAt(ix++);
 			}
+		}
+
+		/**
+		 * @internal
+		 *
+		 * Returns the current stack index.
+		 *
+		 * <p>
+		 * The whole purpose of having stackIndex getters and setters is to
+		 * allow the indexChanged event to be dispatched so that the getters
+		 * for canUndo, canRedo, undoText, and redoText will be updated
+		 * appropriately.
+		 * </p>
+		 */
+		protected function get stackIndex():Number
+		{
+			return __stackIndex;
+		}
+
+		/**
+		 * @internal
+		 * 
+		 * Updates the current stack index.
+		 *
+		 * <p>
+		 * Updates the current stack index and dispatches the indexChanged
+		 * event.
+		 * </p>
+		 */
+		protected function set stackIndex(ix:Number):void
+		{
+			__stackIndex = ix;
+			dispatchEvent(new Event("indexChanged"));
+			dispatchEvent(new Event("cleanChanged"));
+		}
+
+		/**
+		 * @internal
+		 *
+		 * Updates the clean index and dispatches the cleanChanged event.
+		 */
+		protected function setCleanIndex(ix:Number):void
+		{
+			_cleanIndex = ix;
+			dispatchEvent(new Event("cleanChanged"));
 		}
 	}
 }

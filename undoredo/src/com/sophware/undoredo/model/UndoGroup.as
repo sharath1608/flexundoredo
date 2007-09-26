@@ -156,9 +156,9 @@ package com.sophware.undoredo.model
 		/**
 		 * Returns true if the active stack is clean
 		 */
-		public function get isClean() : Boolean
+		public function get clean() : Boolean
 		{
-			return activeStack.isClean;
+			return activeStack.clean;
 		}
 
 	}

@@ -71,8 +71,13 @@ package com.sophware.undoredo.commands
 
 		/**
 		 * Performs the initial modifications, as well as the redo operation
-		 * after an undo event.  Note that these operations should be
-		 * equivalent.
+		 * after an undo event.
+		 * 
+		 * <p>
+		 * By default, the event will be non-null the first time that an event
+		 * is pushed onto the stack.  On subsequent redo events, the event
+		 * will be null.
+		 * </p>
 		 */
 		public function redo( event : CairngormEvent = null ) : void
 		{

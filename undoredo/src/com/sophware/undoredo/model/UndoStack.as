@@ -98,8 +98,7 @@ package com.sophware.undoredo.model
 	
 		
 		/**
-		 * Pushes \a cmd onto the UndoStack and executes the command.  The
-		 * command will attempt to be merged with the prior command.
+		 * Pushes \a cmd onto the UndoStack and executes the command.
 		 * 
 		 * <p>
 		 * The command will be executed with its execute() method when pushed.

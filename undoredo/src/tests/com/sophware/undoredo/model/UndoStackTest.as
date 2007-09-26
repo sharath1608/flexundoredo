@@ -54,7 +54,7 @@ package tests.com.sophware.undoredo.model
 			assertEquals( 0, us.index );
 		}
 
-		public function testTooManyUndoes():void
+		public function testTooManyUndos():void
 		{
 			var cmd:UndoCommand = new UndoCommand();
 			assertFalse(us.canRedo);
@@ -78,7 +78,7 @@ package tests.com.sophware.undoredo.model
 			assertTrue(us.canUndo);
 		}
 
-		public function testTooManyRedoes():void
+		public function testTooManyRedos():void
 		{
 			var cmd:UndoCommand = new UndoCommand();
 			us.push(cmd);

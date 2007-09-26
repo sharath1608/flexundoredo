@@ -20,20 +20,19 @@ package com.sophware.undoredo.commands
 		function undo() : void;
 
 		/**
-		 * Performs a redo operation
+		 * Performs a redo operation.
 		 *
 		 * <p>
-		 * event will often be a CairngormUndoEvent from which the text for
-		 * the undo and redo operations will be pulled by the undo controller.
+		 * The first time an event is pushed onto the UndoStack, the execute()
+		 * method will be called with the generating event as a parameter.
+		 * The provided UndoFrontController will then delegate the
+		 * functionality to the redo() function.  As redo() provides most of
+		 * the desired behavior, redo is expected to store data sufficient for
+		 * the operation to be undone and/or redone.  The redo operation will
+		 * typically operate on the model or call delegates that will operate
+		 * on the module.
 		 * </p>
 		 *
-		 * <p>
-		 * redo() will be called when an command is pushed onto the stack, thus,
-		 * it is the redo() function that will initially make changes to the
-		 * model, etc.  redo() is expected to store the necessary data to be
-		 * able to redo the operation after undo() is called.
-		 * </p>
-		 * 
 		 * <p>
 		 * If the command wishes to use the text associated with a
 		 * CairngormUndoEvent as its text then the redo event is responsible
@@ -42,19 +41,32 @@ package com.sophware.undoredo.commands
 		 * UndoCommand, but overriding functions will need to call the parent's
 		 * redo() function to have this behavior.
 		 * </p>
+		 *
+		 * <p>
+		 * By default, if \a event is of type CairngormUndoEvent the provided
+		 * UndoFrontController will pull the text property of \a event into
+		 * the text property of the command.
+		 * </p>
+		 * 
+		 * @see com.sophware.undoredo.model.UndoStack
+		 * @see com.sophware.undoredo.control.CairngormUndoEvent
+		 * @see com.sophware.undoredo.control.UndoFrontController
 		 */
 		function redo( event : CairngormEvent = null) : void;
 
 		/**
-		 * Returns the id associated with this command type.  Each command type
-		 * should return their own individual id number if they wish to allow
-		 * command merging, see mergeWith(), or a negative number if no command
-		 * merging is supported.
+		 * Returns the id associated with this command type.
+		 *
+		 * <p>
+		 * Each command type should return their own individual id number if
+		 * they wish to allow command merging, see mergeWith(), or a negative
+		 * number if no command merging is supported.
+		 * </p>
 		 */
 		function get id() : Number;
 		
 		/**
-		 * Attempts to merge two undo/redo commands
+		 * Attempts to merge two undo/redo commands.
 		 *
 		 * <p>
 		 * If cmd.id() is non-negative and has the same id as the current

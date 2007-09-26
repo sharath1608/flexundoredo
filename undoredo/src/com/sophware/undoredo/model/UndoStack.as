@@ -406,6 +406,11 @@ package com.sophware.undoredo.model
 		 * @internal
 		 *
 		 * Updates the clean index and dispatches the cleanChanged event.
+		 *
+		 * <p>
+		 * It would be nice if ActionScript supported public getters with
+		 * private setters as then I wouldn't need this helper function.
+		 * </p>
 		 */
 		protected function setCleanIndex(ix:Number):void
 		{

@@ -37,7 +37,7 @@ package com.sophware.undoredo.model
 
 
 		/**
-		 * Returns the redo text associated with the active undo stack
+		 * Returns the redo text associated with the active undo stack.
 		 */
 		public function get redoText() : String
 		{
@@ -45,7 +45,7 @@ package com.sophware.undoredo.model
 		}
 
 		/**
-		 * Returns the undo text associated with the active undo stack
+		 * Returns the undo text associated with the active undo stack.
 		 */
 		public function get undoText() : String
 		{
@@ -53,7 +53,7 @@ package com.sophware.undoredo.model
 		}
 
 		/**
-		 * Returns true if the active undo stack can perform an undo operation
+		 * Returns true if the active undo stack can perform an undo operation.
 		 */
 		public function get canUndo() : Boolean
 		{
@@ -61,7 +61,7 @@ package com.sophware.undoredo.model
 		}
 
 		/**
-		 * Returns true if the active undo stack can perform a redo operation
+		 * Returns true if the active undo stack can perform a redo operation.
 		 */
 		public function get canRedo() : Boolean
 		{
@@ -70,7 +70,7 @@ package com.sophware.undoredo.model
 
 
 		/**
-		 * Adds a new undo stack with the \a name as specified
+		 * Adds a new undo stack with the \a name as specified.
 		 * 
 		 * <p>
 		 * The new undo stack will become the active stack
@@ -90,7 +90,7 @@ package com.sophware.undoredo.model
 
 
 		/**
-		 * Removes the named undo stack from the undo group
+		 * Removes the named undo stack from the undo group.
 		 *
 		 * <p>
 		 * Removes the named undo stack from the undo group.  If the named
@@ -154,7 +154,7 @@ package com.sophware.undoredo.model
 		}
 
 		/**
-		 * Returns true if the active stack is clean
+		 * Returns true if the active stack is clean.
 		 */
 		public function get clean() : Boolean
 		{

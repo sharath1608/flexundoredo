@@ -12,17 +12,17 @@ package com.sophware.undoredo.commands
 	public class UndoCommand implements IUndoCommand
 	{
 		/**
-		 * The "normal" undoType as specified by IUndoCommand
+		 * The "normal" undoType as specified by IUndoCommand.
 		 */
 		public static const UNDOTYPE_NORMAL:String = "normal";
 		
 		/**
-		 * The "ignored" undoType as specified by IUndoCommand
+		 * The "ignored" undoType as specified by IUndoCommand.
 		 */
 		public static const UNDOTYPE_IGNORED:String = "ignored";
 		
 		/**
-		 * The "reset" undoType as specified by IUndoCommand
+		 * The "reset" undoType as specified by IUndoCommand.
 		 */
 		public static const UNDOTYPE_RESET:String = "reset";
 		
@@ -32,7 +32,7 @@ package com.sophware.undoredo.commands
 		
 		
 		/**
-		 * Creates an UndoCommand with no text specified
+		 * Creates an UndoCommand with no text specified.
 		 */
 		public function UndoCommand():void
 		{
@@ -42,7 +42,7 @@ package com.sophware.undoredo.commands
 		
 
 		/**
-		 * The id associated with the specific IUndoCommand type
+		 * The id associated with the specific IUndoCommand type.
 		 */
 		public function get id() : Number
 		{
@@ -87,11 +87,14 @@ package com.sophware.undoredo.commands
 
 		/**
 		 * Execute is called by the front controller and is only used for the
-		 * initial set of modifications.  This normally does not need to be
-		 * overridden as it calls redo() which generally performs the necessary
-		 * changes.  If the event type is CairngormUndoEvent, before calling
-		 * redo, it will set the text of the undo command based on the text
-		 * property of the event.
+		 * initial set of modifications.
+		 * 
+		 * <p>
+		 * This normally does not need to be overridden as it calls redo()
+		 * which generally performs the necessary changes.  If the event type
+		 * is CairngormUndoEvent, before calling redo, it will set the text of
+		 * the undo command to the text property of the event.
+		 * </p>
 		 */
 		public function execute( event : CairngormEvent ) : void
 		{
@@ -104,7 +107,7 @@ package com.sophware.undoredo.commands
 	
 
 		/**
-		 * Returns the text description of this command
+		 * Returns the text description of this command.
 		 */
 		[Bindable]
 		public function get text() : String
@@ -114,7 +117,7 @@ package com.sophware.undoredo.commands
 		
 
 		/**
-		 * Sets the text description of this command
+		 * Sets the text description of this command.
 		 */
 		public function set text( text: String ) : void
 		{
@@ -123,7 +126,7 @@ package com.sophware.undoredo.commands
 		
 
 		/**
-		 * Returns the undo type associated with the command
+		 * Returns the undo type associated with the command.
 		 */
 		[Bindable]
 		public function get undoType() : String
@@ -133,7 +136,7 @@ package com.sophware.undoredo.commands
 		
 
 		/**
-		 * Sets the undo type associated with the command
+		 * Sets the undo type associated with the command.
 		 */
 		public function set undoType(type : String) : void
 		{

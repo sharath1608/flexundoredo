@@ -183,7 +183,7 @@ package com.sophware.undoredo.model
 		 * Returns the undo text associated with \a index
 		 *
 		 * <p>
-		 * If \a index is valid, then the text associated with that text is
+		 * If \a index is valid, then the text associated with it is
 		 * returned, otherwise the empty string is returned.
 		 * </p>
 		 * 

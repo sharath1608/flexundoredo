@@ -200,19 +200,32 @@ package com.sophware.undoredo.model
 		 * a string name that describes what the stack holds, such as as a
 		 * filename, etc.
 		 * </p>
+		 *
+		 * <p>
+		 * If the undo group does not have a stack associated with \a name
+		 * then the active undo stack will not be changed. 
+		 * </p>
 		 * 
 		 * @param name The name of the undo stack to be made active
-		 * @return True if a new active stack has been set
 		 */
-		public function setActiveStack( name : Object ) : Boolean
+		[Bindable(event="activeStackChanged")]
+		public function set activeStackName( name : Object ) : void
 		{
 			if (!hasStack(name))
-				return false;
+				return;
 			_currentStack = name;
 			dispatchEvent( new Event("activeStackChanged") );
-			return true;
-			
 		}
+
+		/**
+		 * Returns the name of the new stack.
+		 */
+		[Bindable(event="activeStackChanged")]
+		public function get activeStackName():Object
+		{
+			return _currentStack;
+		}
+
 
 		/**
 		 * Returns true if the active stack is clean.

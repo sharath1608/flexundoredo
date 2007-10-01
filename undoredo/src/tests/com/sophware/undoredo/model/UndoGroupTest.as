@@ -35,9 +35,11 @@ package tests.com.sophware.undoredo.model
 			// No matter which active stack I have specified, my bound
 			// variable should be the same
 			assertTrue(us == ug.activeStack);
-			ug.setActiveStack("other");
+			ug.activeStackName = "other";
+			assertEquals("other", ug.activeStackName);
 			assertTrue(us == ug.activeStack);
-			ug.setActiveStack("default");
+			ug.activeStackName = "default";
+			assertEquals("default", ug.activeStackName);
 			assertTrue(us == ug.activeStack);
 
 			// just to verify...
@@ -45,9 +47,10 @@ package tests.com.sophware.undoredo.model
 			assertTrue(ug.activeStack.canUndo);
 			assertTrue(us.canUndo);
 
-			ug.setActiveStack("other");
+			ug.activeStackName = "other";
 			assertFalse(ug.activeStack.canUndo);
 			assertFalse(us.canUndo);
+			assertEquals("other", ug.activeStackName);
 		}
 
 		public function testUndoText():void
@@ -73,7 +76,7 @@ package tests.com.sophware.undoredo.model
 			assertEquals("event1", ug.undoText);
 			assertEquals("event1", text);
 
-			ug.setActiveStack("other");
+			ug.activeStackName = "other";
 
 			assertEquals("", ug.undoText);
 			assertEquals("", text);
@@ -85,7 +88,7 @@ package tests.com.sophware.undoredo.model
 			assertEquals("event2", text);
 			assertTrue(ug.activeStack.canUndo);
 
-			ug.setActiveStack("default");
+			ug.activeStackName = "default";
 
 			assertEquals("event1", ug.undoText);
 			assertEquals("event1", text);
@@ -107,7 +110,7 @@ package tests.com.sophware.undoredo.model
 			assertEquals("event1", ug.redoText);
 			assertEquals("event1", text);
 
-			ug.setActiveStack("other");
+			ug.activeStackName = "other";
 
 			assertEquals("", ug.redoText);
 			assertEquals("", text);
@@ -121,7 +124,7 @@ package tests.com.sophware.undoredo.model
 			assertEquals("event2", ug.redoText);
 			assertEquals("event2", text);
 
-			ug.setActiveStack("default");
+			ug.activeStackName = "default";
 
 			assertEquals("event1", ug.redoText);
 			assertEquals("event1", text);
@@ -146,7 +149,7 @@ package tests.com.sophware.undoredo.model
 			assertTrue(bool);
 
 			// verify on the other stack
-			ug.setActiveStack("other");
+			ug.activeStackName = "other";
 			assertFalse(ug.canUndo);
 			assertFalse(bool);
 			ug.activeStack.push(cmd2, evt2);
@@ -159,7 +162,7 @@ package tests.com.sophware.undoredo.model
 			assertFalse(bool);
 		
 			// now change it
-			ug.setActiveStack("default");
+			ug.activeStackName = "default";
 			assertTrue(ug.canUndo);
 			assertTrue(bool);
 			ug.activeStack.undo();
@@ -187,7 +190,7 @@ package tests.com.sophware.undoredo.model
 			assertTrue(ug.canRedo);
 			assertTrue(bool);
 
-			ug.setActiveStack("other");
+			ug.activeStackName = "other";
 			assertFalse(ug.canRedo);
 			assertFalse(bool);
 			ug.activeStack.push(cmd2, evt2);
@@ -197,14 +200,14 @@ package tests.com.sophware.undoredo.model
 			assertTrue(ug.canRedo);
 			assertTrue(bool);
 
-			ug.setActiveStack("default");
+			ug.activeStackName = "default";
 			assertTrue(ug.canRedo);
 			assertTrue(bool);
 			ug.activeStack.redo();
 			assertFalse(ug.canRedo);
 			assertFalse(bool);
 
-			ug.setActiveStack("other");
+			ug.activeStackName = "other";
 			assertTrue(ug.canRedo);
 			assertTrue(bool);
 		}
@@ -231,7 +234,7 @@ package tests.com.sophware.undoredo.model
 			assertTrue(ug.hasStack("test"));
 		}
 
-		public function testIsClean():void
+		public function testClean():void
 		{
 			BindingUtils.bindProperty(this, "bool", ug, "clean");
 			

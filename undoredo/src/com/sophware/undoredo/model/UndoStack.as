@@ -75,13 +75,15 @@ package com.sophware.undoredo.model
 		public function clear():void
 		{
 			_stack = new ArrayCollection();
-			stackIndex = -1;
+			stackIndex = -1; 
 			setCleanIndex(-1);
+			dispatchEvent( new Event("countChanged") );
 		}
 
 		/**
 		 * Returns the size of the undo stack
 		 */
+		[Bindable("countChanged")]
 		public function get count():Number
 		{
 			return _stack.length;
@@ -148,13 +150,17 @@ package com.sophware.undoredo.model
 				removeCmds(stackIndex + 1, _stack.length);
 			}
 			
+			// NOTE: I must execute the command before I attempt to merge it
+			// or push it on the stack because if I don't, and I'm using the
+			// standard UndoCommand class, the text information will not have
+			// been picked up from the event.
+			cmd.execute(event);
+			
 			// if there aren't any undoable events to merge with or I
 			// can't merge, then push the command
 			if (stackIndex < 0 || !_stack[stackIndex].mergeWith(cmd)) {
 				addUndoCmd(cmd);
 			}
-			
-			cmd.execute(event);
 		}
 
 
@@ -326,6 +332,7 @@ package com.sophware.undoredo.model
 		{
 			_stack.addItem(cmd);
 			stackIndex++;
+			dispatchEvent( new Event("countChanged") );
 		}
 
 		/**
@@ -337,6 +344,7 @@ package com.sophware.undoredo.model
 		{
 			_stack.removeItemAt(_stack.length - 1);
 			stackIndex--;
+			dispatchEvent( new Event("countChanged") );
 		}
 
 		/**

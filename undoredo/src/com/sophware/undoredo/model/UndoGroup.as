@@ -1,5 +1,11 @@
 package com.sophware.undoredo.model
 {
+	import mx.binding.BindingManager;
+
+	import flash.utils.describeType;
+	import flash.events.Event;
+	import flash.events.EventDispatcher;
+	import mx.binding.utils.BindingUtils;
 	import flash.utils.Dictionary;
 
 	/**
@@ -19,12 +25,16 @@ package com.sophware.undoredo.model
 	 * 
 	 * @see com.sophware.undoredo.model.UndoStack;
 	 */
-	public class UndoGroup
+	public class UndoGroup extends EventDispatcher
 	{
 		private var _stacks:Dictionary;
-		
-		[Bindable]
 		private var _currentStack:Object;
+
+		private var _redoText:String = "";
+		private var _undoText:String = "";
+		private var _canUndo:Boolean;
+		private var _canRedo:Boolean;
+		private var _clean:Boolean;
 
 		/**
 		 * Creates an UndoGroup.
@@ -33,39 +43,86 @@ package com.sophware.undoredo.model
 		{
 			_stacks = new Dictionary();	
 			_currentStack = null;
+		
+			// bind all the properties of the active stack to their corresponding read-only properties
+
+			var self:Object = this;
+			// hmm... I wonder if there is a better way to refactor this into a helper function/object?
+			var setter:Function = function(arg:*):Boolean {
+				var old:* = self._canUndo;
+				self._canUndo = arg;
+				return old != arg;
+				}
+			BindingHelper.readPropSetter(setter, "canUndoChanged", this, ["activeStack","canUndo"]);
+
+
+			setter = function(arg:*):Boolean {
+				var old:* = self._canRedo;
+				self._canRedo = arg;
+				return old != arg;
+				}
+			BindingHelper.readPropSetter(setter, "canRedoChanged", this, ["activeStack","canRedo"]);
+		
+
+			setter = function(arg:*):Boolean {
+				var old:* = self._undoText;
+				self._undoText = arg;
+				return old != arg;
+				}
+			BindingHelper.readPropSetter(setter, "undoTextChanged", this, ["activeStack","undoText"]);
+
+
+			setter = function(arg:*):Boolean {
+				var old:* = self._redoText;
+				self._redoText = arg;
+				return old != arg;
+				}
+			BindingHelper.readPropSetter(setter, "redoTextChanged", this, ["activeStack","redoText"]);
+
+
+			setter = function(arg:*):Boolean {
+				var old:* = self._clean;
+				self._clean = arg;
+				return old != arg;
+				}
+			BindingHelper.readPropSetter(setter, "cleanChanged", this, ["activeStack","clean"]);
 		}
 
 
 		/**
 		 * Returns the redo text associated with the active undo stack.
 		 */
+		[Bindable(event="redoTextChanged")]
 		public function get redoText() : String
 		{
-			return activeStack.redoText;
+			return _redoText; 
 		}
 
 		/**
 		 * Returns the undo text associated with the active undo stack.
 		 */
+		[Bindable(event="undoTextChanged")]
 		public function get undoText() : String
 		{
-			return activeStack.undoText;
+			return _undoText;
 		}
 
 		/**
 		 * Returns true if the active undo stack can perform an undo operation.
 		 */
+		[Bindable(event="canUndoChanged")]
 		public function get canUndo() : Boolean
 		{
-			return activeStack.canUndo;
+			return _canUndo;
 		}
 
 		/**
 		 * Returns true if the active undo stack can perform a redo operation.
 		 */
+		[Bindable(event="canRedoChanged")]
 		public function get canRedo() : Boolean
 		{
-			return activeStack.canRedo;
+			return _canRedo;
 		}
 
 
@@ -85,6 +142,8 @@ package com.sophware.undoredo.model
 				return false;
 			_stacks[name] = new UndoStack();
 			_currentStack = name;
+
+			dispatchEvent( new Event("activeStackChanged") );
 			return true;
 		}
 
@@ -126,6 +185,7 @@ package com.sophware.undoredo.model
 		 * group.
 		 * </p>
 		 */
+		[Bindable("activeStackChanged")]
 		public function get activeStack() : UndoStack
 		{
 			return _stacks[_currentStack];
@@ -149,6 +209,7 @@ package com.sophware.undoredo.model
 			if (!hasStack(name))
 				return false;
 			_currentStack = name;
+			dispatchEvent( new Event("activeStackChanged") );
 			return true;
 			
 		}
@@ -156,10 +217,31 @@ package com.sophware.undoredo.model
 		/**
 		 * Returns true if the active stack is clean.
 		 */
+		[Bindable(event="cleanChanged")]
 		public function get clean() : Boolean
 		{
 			return activeStack.clean;
 		}
 
 	}
+}
+
+import flash.events.Event;
+import mx.binding.utils.BindingUtils;
+
+class BindingHelper
+{
+	public static function readPropSetter(setter:Function, evt:String, self:Object, chain:Object):void
+	{
+		BindingUtils.bindSetter(
+			function(arg:*):void {
+				var res:* = setter(arg);
+				if (res == undefined || res)
+					self.dispatchEvent(new Event(evt));
+				},
+			self,
+			chain
+			);
+	}
+
 }

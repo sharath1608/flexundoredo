@@ -1,5 +1,7 @@
 package tests.com.sophware.undoredo.model
 {
+	import mx.binding.utils.BindingUtils;
+	
 	import flexunit.framework.TestCase;
 
 	import com.sophware.undoredo.model.UndoGroup;
@@ -13,6 +15,11 @@ package tests.com.sophware.undoredo.model
 	{
 		private var ug:UndoGroup;
 
+		// for testing the bindings
+		[Bindable] public var text:String;
+		[Bindable] public var bool:Boolean;
+		[Bindable] public var us:UndoStack;
+
 		public override function setUp():void
 		{
 			ug = new UndoGroup();
@@ -20,8 +27,33 @@ package tests.com.sophware.undoredo.model
 			ug.addStack("default");
 		}
 
+		public function testActiveStack():void
+		{
+			// if this test doesn't work, almost every test below will fail
+			BindingUtils.bindProperty(this, "us", ug, "activeStack");
+			
+			// No matter which active stack I have specified, my bound
+			// variable should be the same
+			assertTrue(us == ug.activeStack);
+			ug.setActiveStack("other");
+			assertTrue(us == ug.activeStack);
+			ug.setActiveStack("default");
+			assertTrue(us == ug.activeStack);
+
+			// just to verify...
+			ug.activeStack.push(new UndoCommand());
+			assertTrue(ug.activeStack.canUndo);
+			assertTrue(us.canUndo);
+
+			ug.setActiveStack("other");
+			assertFalse(ug.activeStack.canUndo);
+			assertFalse(us.canUndo);
+		}
+
 		public function testUndoText():void
 		{
+			BindingUtils.bindProperty(this, "text", ug, "undoText");
+			
 			var cmd:UndoCommand = new UndoCommand();
 			var cmd2:UndoCommand = new UndoCommand();
 			var evt:SampleAppendEvent = new SampleAppendEvent("orig", "appended");
@@ -29,30 +61,40 @@ package tests.com.sophware.undoredo.model
 			var evt2:SampleAppendEvent = new SampleAppendEvent("orig2", "appended2");
 			evt2.text = "event2";
 			
-			ug.activeStack.push(cmd, evt);
-			assertEquals("event1", ug.activeStack.undoText);
+			ug.activeStack.push(cmd, evt)
+			
+			assertEquals("event1", ug.undoText);
+			assertEquals("event1", text);
+
 			ug.activeStack.undo();
-			assertEquals("", ug.activeStack.undoText);
+			assertEquals("", ug.undoText);
+			assertEquals("", text);
 			ug.activeStack.redo();
-			assertEquals("event1", ug.activeStack.undoText);
+			assertEquals("event1", ug.undoText);
+			assertEquals("event1", text);
 
 			ug.setActiveStack("other");
 
-			assertEquals("", ug.activeStack.undoText);
+			assertEquals("", ug.undoText);
+			assertEquals("", text);
 			assertFalse(ug.activeStack.canUndo);
 			
 			ug.activeStack.push(cmd2, evt2);
 
-			assertEquals("event2", ug.activeStack.undoText);
+			assertEquals("event2", ug.undoText);
+			assertEquals("event2", text);
 			assertTrue(ug.activeStack.canUndo);
 
 			ug.setActiveStack("default");
 
-			assertEquals("event1", ug.activeStack.undoText);
+			assertEquals("event1", ug.undoText);
+			assertEquals("event1", text);
 		}
 
 		public function testRedoText():void
 		{
+			BindingUtils.bindProperty(this, "text", ug, "redoText");
+			
 			var cmd:UndoCommand = new UndoCommand();
 			var cmd2:UndoCommand = new UndoCommand();
 			var evt:SampleAppendEvent = new SampleAppendEvent("orig", "appended");
@@ -61,29 +103,34 @@ package tests.com.sophware.undoredo.model
 			evt2.text = "event2";
 			
 			ug.activeStack.push(cmd, evt);
-			assertEquals("event1", ug.activeStack.undoText);
 			ug.activeStack.undo();
-			assertEquals("", ug.activeStack.undoText);
-			assertEquals("event1", ug.activeStack.redoText);
+			assertEquals("event1", ug.redoText);
+			assertEquals("event1", text);
 
 			ug.setActiveStack("other");
 
-			assertEquals("", ug.activeStack.redoText);
-			assertFalse(ug.activeStack.canRedo);
+			assertEquals("", ug.redoText);
+			assertEquals("", text);
+			assertFalse(ug.canRedo);
 			
 			ug.activeStack.push(cmd2, evt2);
 
-			assertEquals("", ug.activeStack.redoText);
+			assertEquals("", ug.redoText);
+			assertEquals("", text);
 			ug.activeStack.undo();
-			assertEquals("event2", ug.activeStack.redoText);
+			assertEquals("event2", ug.redoText);
+			assertEquals("event2", text);
 
 			ug.setActiveStack("default");
 
-			assertEquals("event1", ug.activeStack.redoText);
+			assertEquals("event1", ug.redoText);
+			assertEquals("event1", text);
 		}
 
 		public function testCanUndo():void
 		{
+			BindingUtils.bindProperty(this, "bool", ug, "canUndo");
+
 			var cmd:UndoCommand = new UndoCommand();
 			var cmd2:UndoCommand = new UndoCommand();
 			var evt:SampleAppendEvent = new SampleAppendEvent("orig", "appended");
@@ -92,29 +139,38 @@ package tests.com.sophware.undoredo.model
 			evt2.text = "event2";
 
 			// verify on the default stack
-			assertFalse(ug.activeStack.canUndo);
+			assertFalse(ug.canUndo);
+			assertFalse(bool);
 			ug.activeStack.push(cmd, evt);
-			assertTrue(ug.activeStack.canUndo);
+			assertTrue(ug.canUndo);
+			assertTrue(bool);
 
 			// verify on the other stack
 			ug.setActiveStack("other");
-			assertFalse(ug.activeStack.canUndo);
+			assertFalse(ug.canUndo);
+			assertFalse(bool);
 			ug.activeStack.push(cmd2, evt2);
-			assertTrue(ug.activeStack.canUndo);
+			assertTrue(ug.canUndo);
+			assertTrue(bool);
 		
 			// make them different and verify
 			ug.activeStack.undo();
-			assertFalse(ug.activeStack.canUndo);
+			assertFalse(ug.canUndo);
+			assertFalse(bool);
 		
 			// now change it
 			ug.setActiveStack("default");
-			assertTrue(ug.activeStack.canUndo);
+			assertTrue(ug.canUndo);
+			assertTrue(bool);
 			ug.activeStack.undo();
-			assertFalse(ug.activeStack.canUndo);
+			assertFalse(ug.canUndo);
+			assertFalse(bool);
 		}
 
 		public function testCanRedo():void
 		{
+			BindingUtils.bindProperty(this, "bool", ug, "canRedo");
+			
 			var cmd:UndoCommand = new UndoCommand();
 			var cmd2:UndoCommand = new UndoCommand();
 			var evt:SampleAppendEvent = new SampleAppendEvent("orig", "appended");
@@ -122,26 +178,35 @@ package tests.com.sophware.undoredo.model
 			var evt2:SampleAppendEvent = new SampleAppendEvent("orig2", "appended2");
 			evt2.text = "event2";
 
-			assertFalse(ug.activeStack.canRedo);
+			assertFalse(ug.canRedo);
+			assertFalse(bool);
 			ug.activeStack.push(cmd, evt);
-			assertFalse(ug.activeStack.canRedo);
+			assertFalse(ug.canRedo);
+			assertFalse(bool);
 			ug.activeStack.undo();
-			assertTrue(ug.activeStack.canRedo);
+			assertTrue(ug.canRedo);
+			assertTrue(bool);
 
 			ug.setActiveStack("other");
-			assertFalse(ug.activeStack.canRedo);
+			assertFalse(ug.canRedo);
+			assertFalse(bool);
 			ug.activeStack.push(cmd2, evt2);
-			assertFalse(ug.activeStack.canRedo);
+			assertFalse(ug.canRedo);
+			assertFalse(bool);
 			ug.activeStack.undo();
-			assertTrue(ug.activeStack.canRedo);
+			assertTrue(ug.canRedo);
+			assertTrue(bool);
 
 			ug.setActiveStack("default");
-			assertTrue(ug.activeStack.canRedo);
+			assertTrue(ug.canRedo);
+			assertTrue(bool);
 			ug.activeStack.redo();
-			assertFalse(ug.activeStack.canRedo);
+			assertFalse(ug.canRedo);
+			assertFalse(bool);
 
 			ug.setActiveStack("other");
-			assertTrue(ug.activeStack.canRedo);
+			assertTrue(ug.canRedo);
+			assertTrue(bool);
 		}
 
 		public function testRemoveStack():void
@@ -168,27 +233,29 @@ package tests.com.sophware.undoredo.model
 
 		public function testIsClean():void
 		{
+			BindingUtils.bindProperty(this, "bool", ug, "clean");
+			
 			var cmd:UndoCommand = new UndoCommand();
 			var evt:SampleAppendEvent = new SampleAppendEvent("orig", "appended");
 			evt.text = "event1";
 			
 			assertTrue(ug.clean);
-			assertTrue(ug.activeStack.clean);
+			assertTrue(bool);
 			
 			ug.activeStack.push(cmd, evt);
 			
 			assertFalse(ug.clean);
-			assertFalse(ug.activeStack.clean);
+			assertFalse(bool);
 			
 			ug.activeStack.undo();
 			
 			assertTrue(ug.clean);
-			assertTrue(ug.activeStack.clean);
+			assertTrue(bool);
 			
 			ug.activeStack.redo();
 			
 			assertFalse(ug.clean);
-			assertFalse(ug.activeStack.clean);
+			assertFalse(bool);
 		}
 	}
 }

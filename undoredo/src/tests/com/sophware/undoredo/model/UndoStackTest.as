@@ -13,6 +13,7 @@ package tests.com.sophware.undoredo.model
 		[Bindable] public var bool:Boolean;
 		[Bindable] public var text:String;
 		[Bindable] public var index:Number;
+		[Bindable] public var count:Number;
 		
 		public override function setUp():void
 		{
@@ -28,7 +29,6 @@ package tests.com.sophware.undoredo.model
 		
 		public function testCanUndoBinding():void
 		{
-			// make canUndo notify about all changes 
 			BindingUtils.bindProperty(this, "bool", us, "canUndo");
 
 			assertFalse(us.canUndo);
@@ -43,10 +43,16 @@ package tests.com.sophware.undoredo.model
 	
 		public function testCanRedo():void
 		{
+			BindingUtils.bindProperty(this, "bool", us, "canRedo");
+			
 			assertFalse(us.canRedo);
+			assertFalse(bool);
+
 			us.push(new UndoCommand());
 			us.undo();
+			
 			assertTrue(us.canRedo);
+			assertTrue(bool);
 		}
 
 		public function testCanRedoBinding():void
@@ -84,9 +90,13 @@ package tests.com.sophware.undoredo.model
 		
 		public function testCount():void
 		{
+			BindingUtils.bindProperty(this, "count", us, "count");
+			
 			assertEquals( 0, us.count );
+			assertEquals( 0, count); 
 			us.push(new UndoCommand());
 			assertEquals( 1, us.count );
+			assertEquals( 1, count );
 		}
 		
 		public function testGetIndex():void
@@ -341,7 +351,6 @@ package tests.com.sophware.undoredo.model
 			us.push(cmd);
 			assertEquals(-1, us.cleanIndex);
 			assertEquals(-1, index);
-
 		}
 	}
 }

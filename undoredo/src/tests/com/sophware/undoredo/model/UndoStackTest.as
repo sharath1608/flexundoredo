@@ -1,10 +1,14 @@
 package tests.com.sophware.undoredo.model
 {
+	import mx.binding.utils.BindingUtils;
+	
 	import flexunit.framework.TestCase;
+	
 	import com.sophware.undoredo.model.UndoStack;
 	import com.sophware.undoredo.commands.UndoCommand;
 
-	import mx.binding.utils.BindingUtils;
+	import tests.com.sophware.undoredo.commands.SampleMergeCommand;
+
 
 	public class UndoStackTest extends TestCase
 	{
@@ -352,5 +356,54 @@ package tests.com.sophware.undoredo.model
 			assertEquals(-1, us.cleanIndex);
 			assertEquals(-1, index);
 		}
+
+		public function testMergeWith():void
+		{
+			var data:Object = {data:"The "};
+
+			// because this is a mergeable command, no additional items should
+			// be pushed onto the stack, instead the undo will now encompass
+			// all the changes
+			us.push(new SampleMergeCommand(data, "cow "));
+			assertEquals(1, us.count);
+			assertEquals("The cow ", data.data);
+
+			// undo should undo everything, redo should redo everything
+			us.undo();
+			assertEquals("The ", data.data);
+			us.redo();
+			assertEquals("The cow ", data.data);
+
+			// undo should undo everything, redo should redo everything
+			us.push(new SampleMergeCommand(data, "jumped "));
+			assertEquals(1, us.count);
+			assertEquals("The cow jumped ", data.data);
+			us.undo();
+			assertEquals("The ", data.data);
+			us.redo();
+			assertEquals("The cow jumped ", data.data);
+
+			us.push(new SampleMergeCommand(data, "over "));
+			assertEquals(1, us.count);
+			us.push(new SampleMergeCommand(data, "the "));
+			assertEquals(1, us.count);
+			us.push(new SampleMergeCommand(data, "moon!"));
+			assertEquals(1, us.count);
+			assertEquals("The cow jumped over the moon!", data.data);
+			us.undo();
+			assertEquals("The ", data.data);
+			us.redo();
+			assertEquals("The cow jumped over the moon!", data.data);
+
+			// this shouldn't merge because it houses a different data object
+			var data2:Object = {data:"Something else"};
+			us.push(new SampleMergeCommand(data2, " not"));
+			assertEquals(2, us.count);
+			assertEquals("Something else not", data2.data);
+
+			// my data shouldn't have changed
+			assertEquals("The cow jumped over the moon!", data.data);
+		}
 	}
 }
+

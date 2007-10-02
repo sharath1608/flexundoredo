@@ -1,12 +1,10 @@
 package com.sophware.undoredo.model
 {
-	import mx.binding.BindingManager;
-
-	import flash.utils.describeType;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
-	import mx.binding.utils.BindingUtils;
 	import flash.utils.Dictionary;
+	
+	import mx.binding.utils.BindingUtils;
 
 	/**
 	 * A Group of UndoStacks.
@@ -242,8 +240,39 @@ package com.sophware.undoredo.model
 import flash.events.Event;
 import mx.binding.utils.BindingUtils;
 
+/**
+ * Helper class.
+ */
 class BindingHelper
 {
+	/**
+	 * A slightly modified version of bindSetter.
+	 *
+	 * <p>
+	 * Takes in a setter that accepts one argument, the new value of the
+	 * argument in question, and dispatches \a evt if it has an undefined
+	 * return value or returns something that evaluates to true.
+	 * </p>
+	 *
+	 * @param setter The setter function, takes in a single argument and
+	 * returns undefined (void) or something that can evaluate to true/false.
+	 * @param evt The event that should be dispatched if the return value of
+	 * \a setter is either undefined or true.
+	 * @param self The EventDispatcher that contains the chain being
+	 * monitored.
+	 * @param chain The property chain to be monitored.  \a chain must meet
+	 * the criteria described in mx.binding.utils.BindingUtils.bindProperty.
+	 * eg. It must contain one of the following:
+	 * <ul>
+	 * <li>a String containing the name of a bindable public property</li>
+	 * <li>an Object of the form {name:property_name, getter:func} where func
+	 * returns the value of the property</li>
+	 * <li>a non-empty Array containing combinations of the first two
+	 * options</li>
+	 * </ul>
+	 *
+	 * @see mx.binding.utils.BindingUtils
+	 */
 	public static function readPropSetter(setter:Function, evt:String, self:Object, chain:Object):void
 	{
 		BindingUtils.bindSetter(

@@ -17,6 +17,8 @@ package tests.com.sophware.undoredo.control
 
 	public class UndoFrontControllerTest extends TestCase
 	{
+		[Bindable] public var activeStackName:Object;
+		
 		private static var _controller:UndoFrontController;
 		
 		public function UndoFrontControllerTest() : void
@@ -82,8 +84,25 @@ package tests.com.sophware.undoredo.control
 			callbackHelper(f);
 		}
 	
+
+		public function testActiveStackNameBinding():void
+		{
+			import mx.binding.utils.BindingUtils;
+			
+			BindingUtils.bindProperty(this, "activeStackName", _controller, "activeStackName");
+
+			assertEquals(UndoFrontController.UNDOSTACK_NAME, activeStackName);
+
+			// addStack will automatically cause the active undo stack to be
+			// changed
+			_controller.addStack("NewStack");
+
+			assertEquals("NewStack", activeStackName);
+		}
+
+
 		/**
-		 * Takes the callback function and dispatches an event handler
+		 * Takes the callback function and dispatches an event handler.
 		 * 
 		 * <p>
 		 * \a func is a function (often a closure) that is used to test the results

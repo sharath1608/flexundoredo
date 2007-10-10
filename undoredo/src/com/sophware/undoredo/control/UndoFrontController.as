@@ -54,7 +54,9 @@ package com.sophware.undoredo.control
 		 * The name of the undo stack to be added to the undo group
 		 */
 		public static const UNDOSTACK_NAME:String = "defaultStack";
-		
+	
+		private var _undoGroup:UndoGroup;
+		private var _activeStackName:Object;
 		private var _locator:NamedObjectLocator;
 	
 		/**
@@ -82,11 +84,15 @@ package com.sophware.undoredo.control
 		 */
 		public function UndoFrontController()
 		{
+			import mx.binding.utils.BindingUtils;
+			
 			super();
 			_locator = NamedObjectLocator.getInstance();
 			_locator.setObject(UNDOGROUP_NAME, new UndoGroup());	
-			var undoGroup:UndoGroup = _locator.getObject(UNDOGROUP_NAME) as UndoGroup;
-			undoGroup.addStack(UNDOSTACK_NAME);
+			_undoGroup = _locator.getObject(UNDOGROUP_NAME) as UndoGroup;
+			_undoGroup.addStack(UNDOSTACK_NAME);
+
+			BindingUtils.bindProperty(this, "activeStackName", _undoGroup, "activeStackName");
 		}
 		
 		/**
@@ -142,9 +148,15 @@ package com.sophware.undoredo.control
 		}
 	
 		/**
-		 * Adds a new undo stack to the undo group
+		 * Adds a new undo stack to the undo group.
+		 *
+		 * <p>
+		 * The new undo stack automatically becomes the active undo stack.
+		 * </p>
 		 * 
 		 * @param name The name of the undo stack to be added
+		 * 
+		 * @see com.sophware.cairngorm.model.UndoGroup
 		 */
 		public function addStack( name : Object ) : Boolean
 		{
@@ -152,9 +164,16 @@ package com.sophware.undoredo.control
 		}
 
 		/**
-		 * Removes the named undo stack from the undo group
+		 * Removes the named undo stack from the undo group.
+		 *
+		 * <p>
+		 * If the undo stack being removed from the undo group then the active
+		 * undo stack will change.
+		 * </p>
 		 * 
 		 * @param name The name of the undo stack to be removed
+		 *
+		 * @see com.sophware.cairngorm.model.UndoGroup
 		 */
 		public function removeStack( name : Object ) : Boolean
 		{
@@ -170,18 +189,27 @@ package com.sophware.undoredo.control
 		 * </p>
 		 */
 		[Bindable]
-		public function set activeStack( name : Object ) : void
+		public function set activeStackName( name : Object ) : void
 		{
-			_locator.getObject(UNDOGROUP_NAME).activeStack = name;
+			if (_locator.getObject(UNDOGROUP_NAME).activeStackName != name)
+				 _locator.getObject(UNDOGROUP_NAME).activeStackName = name;
+			_activeStackName = name;
 		}
 
 		/**
-		 * Returns the active undo stack in the undo group
+		 * Returns the name of the active undo stack in the undo group
 		 */
-		public function get activeStack() : Object
+		public function get activeStackName() : Object
 		{
-			return _locator.getObject(UNDOGROUP_NAME).activeStack;
+			return _activeStackName;
 		}
 
+		/**
+		 * Returns the undo group that is used by the controller.
+		 */
+		public function get undoGroup() : UndoGroup
+		{
+			return _undoGroup;
+		}
 	}
 }

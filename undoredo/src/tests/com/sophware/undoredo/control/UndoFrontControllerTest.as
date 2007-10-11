@@ -8,10 +8,11 @@ package tests.com.sophware.undoredo.control
 	import com.adobe.cairngorm.control.CairngormEventDispatcher;
 	import com.adobe.cairngorm.control.CairngormEvent;
 
+	import com.sophware.undoredo.control.NamedUndoGroupFactory;
 	import com.sophware.undoredo.control.UndoFrontController;
 	import com.sophware.undoredo.control.UndoStackEvent;
 	import com.sophware.undoredo.commands.UndoStackCommand;
-	
+
 	import tests.com.sophware.undoredo.control.SampleAppendEvent;
 	import tests.com.sophware.undoredo.commands.SampleStringCommand;
 
@@ -91,7 +92,7 @@ package tests.com.sophware.undoredo.control
 			
 			BindingUtils.bindProperty(this, "activeStackName", _controller, "activeStackName");
 
-			assertEquals(UndoFrontController.UNDOSTACK_NAME, activeStackName);
+			assertEquals(NamedUndoGroupFactory.UNDOSTACK_NAME, activeStackName);
 
 			// addStack will automatically cause the active undo stack to be
 			// changed

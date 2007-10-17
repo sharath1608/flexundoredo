@@ -26,6 +26,7 @@ package com.sophware.undoredo.control
 	import com.adobe.cairngorm.CairngormError;
 	import com.adobe.cairngorm.CairngormMessageCodes;
 	
+	import com.sophware.undoredo.UndoRedoConstants;
 	import com.sophware.undoredo.commands.IUndoCommand;
 	import com.sophware.undoredo.commands.UndoCommand;
 	import com.sophware.undoredo.model.UndoStack;
@@ -60,26 +61,40 @@ package com.sophware.undoredo.control
 	 * An undo command that specifies reset will be executed and then the undo
 	 * stack will be reset, clearing all undoable and redoable events.
 	 * </p>
+	 * 
+	 * <p>
+	 * If an event is pushed onto the stack that does not implement the
+	 * IUndoCommand interface, then the event will be treated as either a
+	 * ignored command or a reset undo command, depending on the value of the
+	 * <code>nonUndoCommandUndoType</code> variable.
+	 * </p>
+	 *
+	 * @see com.sophware.undoredo.UndoRedoConstants
 	 */
 	public class UndoFrontController extends FrontController
 	{
 		private var _undoGroup:UndoGroup;
 		private var _activeStackName:Object;
-	
+
+		/**
+		 * Specifies the undoType for non IUndoCommands that are executed.
+		 */
+		[Bindable] public var nonUndoCommandUndoType:String = UndoRedoConstants.UNDOTYPE_RESET;
+
 		/**
 		 * Creates a UndoFrontController.
 		 *
 		 * <p>
-		 * This will create a default undo group as specified by the \a
-		 * factory passed in.  If no factory is passed in, then the default
-		 * NamedUndoGroupFactory is used to create the undo group that will be
-		 * used by the front controller.
+		 * This will create a default undo group as specified by the
+		 * <code>factory</code> passed in.  If no factory is passed in, then
+		 * the default NamedUndoGroupFactory is used to create the undo group
+		 * that will be used by the front controller.
 		 * </p>
 		 *
 		 * <p>
 		 * Additional undo stacks can be added to the undo group by using the
-		 * addStack() and removeStack() accessors, or by referencing the undo
-		 * group directly.
+		 * <code>addStack()</code> and <code>removeStack()</code> accessors,
+		 * or by referencing the undo group directly.
 		 * </p>
 		 *
 		 * @see com.sophware.undoredo.control.NamedUndoGroupFactory
@@ -108,7 +123,7 @@ package com.sophware.undoredo.control
 		 * 
 		 * <p>
 		 * If the command being executed is an undo command and the type is
-		 * UNDOTYPE_NORMAL, then the event being passed must be a 
+		 * <code>UNDOTYPE_NORMAL</code>, then the event being passed must be a 
 		 * CairngormUndoEvent since the undo and redo text will be pulled
 		 * from the generating event.  If the event is not a CairngormUndoEvent
 		 * then null will be passed instead of the event in question.
@@ -122,13 +137,13 @@ package com.sophware.undoredo.control
 			if (commandToExecute is IUndoCommand) {
 				var cmd:IUndoCommand = commandToExecute as IUndoCommand;
 				switch (cmd.undoType) {
-					case UndoCommand.UNDOTYPE_NORMAL:
+					case UndoRedoConstants.UNDOTYPE_NORMAL:
 						_undoGroup.activeStack.push(cmd, event);
 						break;
-					case UndoCommand.UNDOTYPE_IGNORED:
+					case UndoRedoConstants.UNDOTYPE_IGNORED:
 						cmd.execute(event);
 						break;
-					case UndoCommand.UNDOTYPE_RESET:
+					case UndoRedoConstants.UNDOTYPE_RESET:
 						cmd.execute(event);
 						_undoGroup.activeStack.clear();
 				}
@@ -136,15 +151,15 @@ package com.sophware.undoredo.control
 				//
 				// by default a command that doesn't implement the IUndoCommand interface
 				// is a command that is non-undoable and, therefore, will cause the undo
-				// stack to be reset.
-				// 
-				// if an event that is ignorable is really desired, implement the
-				// IUndoCommand interface and set the undoType to:
+				// stack to either be reset or be ignored.
 				//
-				// UndoCommand.UNDOTYPE_IGNORED
-				//
+				
+				// either way, execute the event
 				commandToExecute.execute( event );
-				_undoGroup.activeStack.clear();
+				
+				if (nonUndoCommandUndoType == UndoRedoConstants.UNDOTYPE_RESET) {
+					_undoGroup.activeStack.clear();
+				}
 	        }
 		}
 	
@@ -182,7 +197,7 @@ package com.sophware.undoredo.control
 		}
 
 		/**
-		 * Sets the active undo stack to the named undo stack
+		 * Sets the active undo stack to the named undo stack.
 		 *
 		 * <p>
 		 * If the named undo stack does not exist, the active undo stack will

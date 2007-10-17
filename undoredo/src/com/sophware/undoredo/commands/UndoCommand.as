@@ -22,6 +22,7 @@ package com.sophware.undoredo.commands
 {
 	import com.adobe.cairngorm.commands.ICommand;
 	import com.adobe.cairngorm.control.CairngormEvent;
+	import com.sophware.undoredo.UndoRedoConstants;
 	import com.sophware.undoredo.control.CairngormUndoEvent;
 	
 	/**
@@ -31,32 +32,16 @@ package com.sophware.undoredo.commands
 	 */
 	public class UndoCommand implements IUndoCommand
 	{
-		/**
-		 * The "normal" undoType as specified by IUndoCommand.
-		 */
-		public static const UNDOTYPE_NORMAL:String = "normal";
-		
-		/**
-		 * The "ignored" undoType as specified by IUndoCommand.
-		 */
-		public static const UNDOTYPE_IGNORED:String = "ignored";
-		
-		/**
-		 * The "reset" undoType as specified by IUndoCommand.
-		 */
-		public static const UNDOTYPE_RESET:String = "reset";
-		
 		
 		private var _text:String;
 		private var _undoType:String;
-		
 		
 		/**
 		 * Creates an UndoCommand with no text specified.
 		 */
 		public function UndoCommand():void
 		{
-			_undoType = UNDOTYPE_NORMAL;
+			_undoType = UndoRedoConstants.UNDOTYPE_NORMAL;
 			_text = "";
 		}
 		

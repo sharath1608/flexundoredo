@@ -33,18 +33,41 @@ package com.sophware.undoredo.control
 	 * is added to the UndoGroup with the name specified by UNDOSTACK_NAME.
 	 * </p>
 	 *
+	 * <p>
+	 * Only one instance (per <code>UNDOGROUP_NAME</code>) is created.
+	 * Calling create a second time with the same name will return the same
+	 * instance object.
+	 * </p>
+	 * 
 	 * @see com.sophware.cairngorm.model.NamedObjectLocator
 	 */
 	public class NamedUndoGroupFactory implements IUndoGroupFactory
 	{
+		/**
+		 * The name of the undo group that will be used to create or return
+		 * the undo group returned by <code>getInstance()</code>.
+		 */
 		public static var UNDOGROUP_NAME:String = "undoGroup";
+
+		/**
+		 * The name of the undo stack that will be added to the undo group
+		 * when it is created the first time <code>getInstance()</code> is
+		 * called for the specified <code>UNDOGROUP_NAME</code>.
+		 */
 		public static var UNDOSTACK_NAME:String = "defaultStack";
 		
-		public function create():UndoGroup
+		/**
+		 * Returns the undo group instance that is created for or used by the
+		 * specified <code>UNDOGROUP_NAME</code>.
+		 */
+		public function getInstance():UndoGroup
 		{
-			var ug:UndoGroup = new UndoGroup();
-			NamedObjectLocator.getInstance().setObject(UNDOGROUP_NAME, ug);
-			ug.addStack(UNDOSTACK_NAME);
+			var ug:UndoGroup = NamedObjectLocator.getInstance().getObject(UNDOGROUP_NAME) as UndoGroup;
+			if (ug == null) {
+				ug = new UndoGroup();
+				NamedObjectLocator.getInstance().setObject(UNDOGROUP_NAME, ug);
+				ug.addStack(UNDOSTACK_NAME);
+			}
 			return ug;
 		}
 

@@ -104,10 +104,11 @@ package com.sophware.undoredo.control
 			import mx.binding.utils.BindingUtils;
 			
 			super();
+
 			if (factory == null)
 				factory = new NamedUndoGroupFactory();
 
-			_undoGroup = factory.create();
+			_undoGroup = factory.getInstance();
 
 			BindingUtils.bindProperty(this, "activeStackName", _undoGroup, "activeStackName");
 		}
@@ -134,6 +135,10 @@ package com.sophware.undoredo.control
 			var commandToInitialise : Class = getCommand( event.type );
 			var commandToExecute : ICommand = new commandToInitialise();
 
+			// the commands that handle undo and redo (UndoStackCommand) are
+			// no different than any other commands, they simply have
+			// knowledge of the undo group and call undo or redo on the group.
+			// They are typically (and should be) ignorable events.
 			if (commandToExecute is IUndoCommand) {
 				var cmd:IUndoCommand = commandToExecute as IUndoCommand;
 				switch (cmd.undoType) {
@@ -213,7 +218,7 @@ package com.sophware.undoredo.control
 		}
 
 		/**
-		 * Returns the name of the active undo stack in the undo group
+		 * Returns the name of the active undo stack in the undo group.
 		 */
 		public function get activeStackName() : Object
 		{

@@ -28,7 +28,7 @@ package com.sophware.undoredo.commands
 	 * Handles a set of synchronous commands as a single undoable operation.
 	 *
 	 * <p>
-	 * Applies undo() or redo() on a set of commands, one after another.  Note
+	 * Applies <code>undo()</code> or <code>redo()</code> on a set of commands, one after another.  Note
 	 * that this assumes that everything is performed synchronously, so if the
 	 * order in which the commands returns or the commands use delegates to
 	 * perform the operation, a set of SequenceCommands might work better.
@@ -37,8 +37,7 @@ package com.sophware.undoredo.commands
 	 * <p>
 	 * Working with asynchronous commands is quite a bit more complicated,
 	 * especially if they are to be treated as a single undoable operation.
-	 * Specifically, this will need to be integrated at the undo controller
-	 * level.
+	 * This might need to be integrated into the front controller later.
 	 * </p>
 	 *
 	 * <p>
@@ -69,7 +68,7 @@ package com.sophware.undoredo.commands
 
 
 		/**
-		 * Creates an AggregateUndoCommand
+		 * Creates an AggregateUndoCommand.
 		 */
 		public function AggregateUndoCommand( cmds : ArrayCollection = null) : void
 		{
@@ -79,7 +78,7 @@ package com.sophware.undoredo.commands
 
 
 		/**
-		 * Returns the order in which the undo operations will be applied
+		 * Returns the order in which the undo operations will be applied.
 		 */
 		public function get order():String
 		{
@@ -87,7 +86,10 @@ package com.sophware.undoredo.commands
 		}
 
 		/**
-		 * Sets the order in which the undo operations will be applied
+		 * Sets the order in which the undo operations will be applied.
+		 * 
+		 * @param s The order in which the operations will be undone.  This
+		 * should be either <code>"LIFO"</code> or <code>"FIFO"</code>.
 		 */
 		public function set order(s:String):void
 		{
@@ -95,7 +97,8 @@ package com.sophware.undoredo.commands
 		}
 
 		/**
-		 * Performs the undo operations in the order specified by \a order
+		 * Performs the undo operations in the order specified by the
+		 * <code>order</code> property.
 		 */
 		public override function undo() : void
 		{
@@ -115,6 +118,9 @@ package com.sophware.undoredo.commands
 		/**
 		 * Performs the redo operations in the order in which they were
 		 * provided to the AggregateUndoCommand.
+		 *
+		 * @param event The parameter will be null for redo events and may be
+		 * null the first time the command is executed.
 		 */
 		public override function redo( event : CairngormEvent = null ) : void
 		{

@@ -27,12 +27,27 @@ package com.sophware.undoredo.control
 	 * controller.
 	 *
 	 * <p>
-	 * The create function should return an UndoGroup object that has an
-	 * active stack that can be used by the UndoFrontController.
+	 * The <code>getInstance</code> function should return an
+	 * <code>UndoGroup</code> object that has an active stack that can be used
+	 * by the <code>UndoFrontController</code>.
 	 * </p>
+	 * 
+	 * <p>
+	 * This factory interface is used by both the
+	 * <code>FrontUndoController</code> as well as the
+	 * <code>UndoStackCommand</code>.  The FrontUndoController is passed an
+	 * object that implements this interface.  That object is then used to
+	 * create the undo group used by the undo controller.  This interface is
+	 * used by the <code>UndoStackCommand</code> through the
+	 * <code>UndoStackEvent</code>'s factory property.
+	 * </p>
+	 *
+	 * @see com.sophware.undoredo.control.UndoStackEvent
+	 * @see com.sophware.undoredo.control.FrontUndoController
+	 * @see com.sophware.undoredo.commands.UndoStackCommand
 	 */
 	public interface IUndoGroupFactory
 	{
-		function create():UndoGroup;
+		function getInstance():UndoGroup;
 	}
 }

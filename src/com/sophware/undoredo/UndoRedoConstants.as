@@ -23,17 +23,17 @@ package com.sophware.undoredo
 	public class UndoRedoConstants
 	{
 		/**
-		 * The "normal" undoType as specified by IUndoCommand.
+		 * The "normal" undoType as specified by <code>IUndoCommand</code>.
 		 */
 		public static const UNDOTYPE_NORMAL:String = "normal";
 		
 		/**
-		 * The "ignored" undoType as specified by IUndoCommand.
+		 * The "ignored" undoType as specified by <code>IUndoCommand</code>.
 		 */
 		public static const UNDOTYPE_IGNORED:String = "ignored";
 		
 		/**
-		 * The "reset" undoType as specified by IUndoCommand.
+		 * The "reset" undoType as specified by <code>IUndoCommand</code>.
 		 */
 		public static const UNDOTYPE_RESET:String = "reset";
 	}

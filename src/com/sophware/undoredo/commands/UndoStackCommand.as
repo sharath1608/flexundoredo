@@ -48,23 +48,28 @@ package com.sophware.undoredo.commands
 		 * Executes an undo or redo operation based on event.operation.
 		 * 
 		 * <p>
-		 * event is assumed to be a UndoStackEvent.  If it is not an 
-		 * UndoStackEvent then no operation will be performed.  The operation
-		 * is performed against the active undo stack used by the undo front
-		 * controller.
+		 * <code>event</code> must be a <code>UndoStackEvent</code>.  If it is
+		 * not an <code>UndoStackEvent</code>  or the factory property on the
+		 * UndoStackEvent is null then no operation will be performed.  The
+		 * operation is performed against the <code>undoGroup</code> that is
+		 * returned by the <code>getInstance()</code> call to the factory
+		 * property of the <code>UndoStackEvent</code>.
 		 * </p>
 		 */
 		public override function execute(event:CairngormEvent):void
 		{
 			var e:UndoStackEvent = event as UndoStackEvent;
-			if (e == null)
+			if (e == null || e.factory == null)
 				return;
 			
-			var undoGroup:UndoGroup = NamedObjectLocator.getInstance().getObject("undoGroup") as UndoGroup
+			var undoGroup:UndoGroup = e.factory.getInstance();
+			if (undoGroup == null)
+				return;
 			if (e.type == UndoStackEvent.UNDO) {
 				undoGroup.activeStack.undo();
-			} else
+			} else {
 				undoGroup.activeStack.redo();
+			}		
 		}
 	}
 }

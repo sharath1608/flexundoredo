@@ -27,12 +27,13 @@ package com.sophware.cairngorm.model
 	import com.adobe.cairngorm.CairngormMessageCodes;
 	
 	/**
-	 * Provides singleton like access to different named objects
+	 * Provides singleton like access to different named objects.
 	 *
 	 * <p>
 	 * This class is a singleton that provides access to different named
 	 * objects.  These are basically named singletons, or shared global
-	 * objects.
+	 * objects.  It essentially supports the Multiton pattern (eg. one
+	 * instance per keyword).
 	 * </p>
 	 */
 	public class NamedObjectLocator implements IModelLocator
@@ -42,8 +43,11 @@ package com.sophware.cairngorm.model
 		private var _dict:Dictionary;
 	
 		/**
-		 * Creates the NamedObjectLocator object.  As this is a singleton,
-		 * only one instance is allowed.
+		 * Creates the NamedObjectLocator object.
+		 *
+		 * <p>
+		 * As this is a singleton, only one instance is allowed.
+		 * </p>
 		 */
 		public function NamedObjectLocator():void
 		{
@@ -55,7 +59,7 @@ package com.sophware.cairngorm.model
 		}
 
 		/**
-		 * Returns the only instance of this NamedObjectLocator class
+		 * Returns the only instance of this NamedObjectLocator class.
 		 */
 		public static function getInstance() : NamedObjectLocator
 		{
@@ -65,9 +69,9 @@ package com.sophware.cairngorm.model
 		}
 
 		/**
-		 * Returns an object by name, if it exists
+		 * Returns an object by name, if it exists.
 		 *
-		 * @param The name of the object to be returned
+		 * @param name The name of the object to be returned
 		 */
 		public function getObject( name : Object ) : Object
 		{
@@ -75,7 +79,7 @@ package com.sophware.cairngorm.model
 		}
 
 		/**
-		 * Sets the name of an object and its corresponding value
+		 * Sets the name of an object and its corresponding value.
 		 */
 		public function setObject( name : Object, value : Object ) : void
 		{

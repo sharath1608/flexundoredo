@@ -123,17 +123,19 @@ package tests.com.sophware.undoredo.control
 
 
 		/**
+		 * @internal
+		 *
 		 * Takes the callback function and dispatches an event handler.
 		 * 
 		 * <p>
-		 * \a func is a function (often a closure) that is used to test the results
+		 * <code>func</code> is a function (often a closure) that is used to test the results
 		 * of a function.  This is _not_ the best way to test.  The correct implementation
-		 * would be as follows:
+		 * is based off the following blog:
 		 * </p>
 		 * 
-		 * <tt>
+		 * <a href="http://jharbs.com/blog/?p=96">
 		 * http://jharbs.com/blog/?p=96
-		 * </tt>
+		 * </a>
 		 * 
 		 * <p>
 		 * However, that would require that everybody this was distributed to be using
@@ -149,6 +151,11 @@ package tests.com.sophware.undoredo.control
 			t.start();
 		}
 
+		/**
+		 * @internal
+		 * 
+		 * Helper function that dispatches a <code>SampleAppendEvent</code>.
+		 */
 		private function invokeAppendCommand():SampleAppendEvent
 		{
 			var event:SampleAppendEvent = new SampleAppendEvent("first","second");

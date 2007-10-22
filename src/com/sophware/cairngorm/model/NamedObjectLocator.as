@@ -60,6 +60,8 @@ package com.sophware.cairngorm.model
 
 		/**
 		 * Returns the only instance of this NamedObjectLocator class.
+		 * 
+		 * @return A NamedObjectLocator instance
 		 */
 		public static function getInstance() : NamedObjectLocator
 		{
@@ -72,6 +74,7 @@ package com.sophware.cairngorm.model
 		 * Returns an object by name, if it exists.
 		 *
 		 * @param name The name of the object to be returned
+		 * @return The object specified by <code>name</code> or null
 		 */
 		public function getObject( name : Object ) : Object
 		{

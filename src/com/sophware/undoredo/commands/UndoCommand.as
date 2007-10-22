@@ -58,6 +58,9 @@ package com.sophware.undoredo.commands
 		/**
 		 * Attempts to merge two distinct undo commands into a single
 		 * operation.
+		 *
+		 * @param cmd The command to attempt to merge with the current command
+		 * @return True if the merge was successful, false otherwise
 		 */
 		public function mergeWith( cmd : IUndoCommand ) : Boolean
 		{

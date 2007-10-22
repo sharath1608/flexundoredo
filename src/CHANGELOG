@@ -1,0 +1,7 @@
+	- Add CHANGELOG to repository
+	- Documentation cleanup and fixes
+	- Remove debug info from swc
+	- Remove test classes from swc
+
+VERSION 1.0
+	- Initial Release

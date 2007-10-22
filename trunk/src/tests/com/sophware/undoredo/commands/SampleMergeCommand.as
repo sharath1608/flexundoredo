@@ -49,15 +49,18 @@ package tests.com.sophware.undoredo.commands
 
 		public override function get id() : Number
 		{
+			// this must return a non-negative number in order for the merge
+			// to be considered
 			return 1;
 		}
 
 		public override function mergeWith( cmd : IUndoCommand ) : Boolean
 		{
+			// the merge is considered if the id's match
 			if (cmd.id == id) {
 				var mc:SampleMergeCommand = cmd as SampleMergeCommand;
 				// only merge if they represent the same data object.
-				if (_data == mc._data) {
+				if (mc != null && _data == mc._data) {
 					_text = _text + mc._text;
 					return true;
 				}

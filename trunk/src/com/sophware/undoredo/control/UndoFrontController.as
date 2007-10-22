@@ -176,6 +176,8 @@ package com.sophware.undoredo.control
 		 * </p>
 		 * 
 		 * @param name The name of the undo stack to be added
+		 * @return True if the object was added to the undo stack, false
+		 * otherwise
 		 * 
 		 * @see com.sophware.cairngorm.model.UndoGroup
 		 */
@@ -193,6 +195,8 @@ package com.sophware.undoredo.control
 		 * </p>
 		 * 
 		 * @param name The name of the undo stack to be removed
+		 * @return True if the object was removed from the undostack, false if
+		 * it was not
 		 *
 		 * @see com.sophware.cairngorm.model.UndoGroup
 		 */

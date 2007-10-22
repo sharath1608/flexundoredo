@@ -123,7 +123,7 @@ package tests.com.sophware.undoredo.control
 
 
 		/**
-		 * @internal
+		 * @private
 		 *
 		 * Takes the callback function and dispatches an event handler.
 		 * 
@@ -152,7 +152,7 @@ package tests.com.sophware.undoredo.control
 		}
 
 		/**
-		 * @internal
+		 * @private
 		 * 
 		 * Helper function that dispatches a <code>SampleAppendEvent</code>.
 		 */

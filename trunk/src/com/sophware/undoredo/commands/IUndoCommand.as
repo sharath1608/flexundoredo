@@ -92,15 +92,20 @@ package com.sophware.undoredo.commands
 		 * <p>
 		 * If <code>cmd.id()</code> is non-negative and has the same id as the
 		 * current command, then a merge of the two commands is attempted,
-		 * with the 'this' command becoming equivalent to calling both
+		 * If the merge succeeds, <code>cmd</code> will be merged into this
+		 * command and will become equivalent to calling both
 		 * <code>this.redo()</code> and <code>cmd.redo()</code> on the
 		 * non-merged command.
 		 * </p>
 		 *
 		 * <p>
 		 * This merging idea is based on the undo/redo implementation provided
-		 * by Qt: http://doc.trolltech.com/4.3/qundocommand.html#mergeWith
+		 * by Qt: <a
+		 * href="http://doc.trolltech.com/4.3/qundocommand.html#mergeWith">http://doc.trolltech.com/4.3/qundocommand.html#mergeWith</a>
 		 * </p>
+		 *
+		 * @param cmd The cmd to attempt to merge into this command
+		 * @return true if the merge was successful, false otherwise
 		 */
 		function mergeWith( cmd : IUndoCommand ) : Boolean;
 
@@ -108,7 +113,8 @@ package com.sophware.undoredo.commands
 		 * The type of undo operation.
 		 *
 		 * <p>
-		 * An operation can be "normal", "ignored", or "reset".
+		 * An operation can be <code>"normal"</code>, <code>"ignored"</code>,
+		 * or <code>"reset"</code>.
 		 * </p>
 		 *
 		 * <p>
@@ -122,6 +128,8 @@ package com.sophware.undoredo.commands
 		 * <p>
 		 * reset - Calls redo(), clears the undo stack.
 		 * </p>
+		 *
+		 * @return The current undoType
 		 */
 		function get undoType() : String;
 

@@ -41,9 +41,10 @@ package com.sophware.undoredo.model
 	 * 
 	 * <p>
 	 * This UndoStack class is based on the QUndoStack class that comes with
-	 * Qt 4.X.  See http://doc.trolltech.com/4.3/qundostack.html.  It is a well
-	 * designed class that leverages the command design pattern for undo and
-	 * redo events.
+	 * Qt 4.X.  See <a
+	 * href="http://doc.trolltech.com/4.3/qundostack.html">http://doc.trolltech.com/4.3/qundostack.html</a>.
+	 * It is a well designed class that leverages the command design pattern
+	 * for undo and redo events.
 	 * </p>
 	 *
 	 */
@@ -66,7 +67,7 @@ package com.sophware.undoredo.model
 
 
 		/**
-		 * True if an undoable event is present on the stack
+		 * Returns true if an undoable event is present on the stack
 		 */
 		[Bindable("indexChanged")]
 		public function get canUndo():Boolean
@@ -134,7 +135,7 @@ package com.sophware.undoredo.model
 	
 		
 		/**
-		 * Pushes \a cmd onto the UndoStack and executes the command.
+		 * Pushes <code>cmd</code> onto the UndoStack and executes the command.
 		 * 
 		 * <p>
 		 * The command will be executed with its execute() method when pushed.
@@ -200,10 +201,10 @@ package com.sophware.undoredo.model
 		}
 
 		/**
-		 * Returns the undo text associated with \a index
+		 * Returns the undo text associated with <code>index</code>.
 		 *
 		 * <p>
-		 * If \a index is valid, then the text associated with it is
+		 * If <code>index</code> is valid, then the text associated with it is
 		 * returned, otherwise the empty string is returned.
 		 * </p>
 		 * 
@@ -218,7 +219,7 @@ package com.sophware.undoredo.model
 
 
 		/**
-		 * Returns the undo text for the next undo command
+		 * Returns the undo text for the next undo command.
 		 *
 		 * <p>
 		 * An empty string is returned if no no undoable events are available.
@@ -234,7 +235,7 @@ package com.sophware.undoredo.model
 
 
 		/**
-		 * Performs an undo operation if one is available
+		 * Performs an undo operation if one is available.
 		 */
 		public function undo():void
 		{
@@ -246,7 +247,7 @@ package com.sophware.undoredo.model
 
 		
 		/**
-		 * Performs a redo operation if one is available
+		 * Performs a redo operation if one is available.
 		 */
 		public function redo():void
 		{
@@ -258,9 +259,9 @@ package com.sophware.undoredo.model
 
 		
 		/**
-		 * Repeatedly calls undo or redo to change change the state of the
-		 * document.
-		 * 
+		 * Repeatedly calls undo or redo until the specified index has been
+		 * reached.
+		 *
 		 * @param index a non-negative index number
 		 */
 		public function set index(ix:Number):void
@@ -328,8 +329,6 @@ package com.sophware.undoredo.model
 
 
 		/**
-		 * @internal
-		 *
 		 * Returns true if the index is valid
 		 * 
 		 * @param ix a non-negative index number
@@ -342,9 +341,8 @@ package com.sophware.undoredo.model
 		}
 
 		/**
-		 * @internal
-		 *
-		 * Adds an undo command to the top of the stack
+		 * Adds an undo command to the top of the stack and dispatches an
+		 * appropriate event.
 		 * 
 		 * @param cmd The undo command to add to the stack
 		 */
@@ -356,8 +354,6 @@ package com.sophware.undoredo.model
 		}
 
 		/**
-		 * @internal
-		 * 
 		 * Removes the top undo command from the stack
 		 */
 		protected function removeUndoCmd():void
@@ -368,8 +364,6 @@ package com.sophware.undoredo.model
 		}
 
 		/**
-		 * @internal
-		 *
 		 * Removes the items between the first index (inclusive) and the last
 		 * index (exclusive).
 		 *
@@ -397,8 +391,6 @@ package com.sophware.undoredo.model
 		}
 
 		/**
-		 * @internal
-		 *
 		 * Returns the current stack index.
 		 *
 		 * <p>
@@ -414,8 +406,6 @@ package com.sophware.undoredo.model
 		}
 
 		/**
-		 * @internal
-		 * 
 		 * Updates the current stack index.
 		 *
 		 * <p>
@@ -431,8 +421,6 @@ package com.sophware.undoredo.model
 		}
 
 		/**
-		 * @internal
-		 *
 		 * Updates the clean index and dispatches the cleanChanged event.
 		 *
 		 * <p>

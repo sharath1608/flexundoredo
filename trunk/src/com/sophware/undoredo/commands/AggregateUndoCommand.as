@@ -79,6 +79,8 @@ package com.sophware.undoredo.commands
 
 		/**
 		 * Returns the order in which the undo operations will be applied.
+		 *
+		 * @return The String representing the order of undo operations.
 		 */
 		public function get order():String
 		{

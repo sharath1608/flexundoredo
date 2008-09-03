@@ -424,6 +424,27 @@ package tests.com.sophware.undoredo.model
 			// my data shouldn't have changed
 			assertEquals("The cow jumped over the moon!", data.data);
 		}
+		
+		public function testDoUndoDoUndo():void
+		{
+			// ISSUE 1 on the flex undoredo project issue tracker
+			var cmd1:UndoCommand = new UndoCommand();
+			var cmd2:UndoCommand = new UndoCommand();
+			cmd1.text = "testCmd";
+			cmd2.text = "otherCmd";
+		
+			us.push(cmd1);
+			assertEquals( "testCmd", us.undoText );
+			
+			us.undo();
+			
+			us.push(cmd2);
+			assertEquals( "otherCmd", us.undoText );
+			
+			us.undo(); // should fail
+			assertFalse(us.canUndo);
+			assertTrue(us.canRedo);
+		}
 	}
 }
 

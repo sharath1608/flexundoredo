@@ -381,12 +381,12 @@ package com.sophware.undoredo.model
 		 */
 		protected function removeCmds(start:Number, end:Number):void
 		{
-			if (end >= start || start < 0)
+			if (end <= start || start < 0)
 				return;
 
-			var ix:Number = start;
-			while (ix < end) {
-				_stack.removeItemAt(ix++);
+			var ix:Number = end - 1;
+			while (ix >= start) {
+				_stack.removeItemAt(ix--);
 			}
 		}
 

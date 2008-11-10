@@ -15,10 +15,9 @@
  */
 package tests.com.sophware.undoredo.control
 {
-	import com.adobe.cairngorm.control.CairngormEvent;
-	import com.sophware.undoredo.control.CairngormUndoEvent;
+	import com.sophware.undoredo.control.UndoEvent;
 
-	public class SampleAppendEvent extends CairngormUndoEvent
+	public class SampleAppendEvent extends UndoEvent
 	{
 		public static const APPEND:String = "sample_append_event";
 		

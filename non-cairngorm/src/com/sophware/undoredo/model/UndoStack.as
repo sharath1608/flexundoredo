@@ -19,7 +19,7 @@ package com.sophware.undoredo.model
 	import flash.events.EventDispatcher;
 	import mx.collections.ArrayCollection;
 	
-	import com.adobe.cairngorm.control.CairngormEvent;
+	import com.sophware.undoredo.control.BaseUndoRedoEvent;
 	import com.sophware.undoredo.commands.UndoCommand;
 	import com.sophware.undoredo.commands.IUndoCommand;
 	
@@ -154,7 +154,7 @@ package com.sophware.undoredo.model
 		 * @param cmd The command being pushed onto the stack
 		 * @param event The payload for the command being pushed onto the stack
 		 */
-		public function push(cmd:IUndoCommand, event:CairngormEvent = null):void
+		public function push(cmd:IUndoCommand, event:BaseUndoRedoEvent = null):void
 		{
 			
 			if (canRedo) {

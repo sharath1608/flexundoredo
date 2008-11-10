@@ -15,7 +15,7 @@
  */
 package tests.com.sophware.undoredo.commands
 {
-	import com.adobe.cairngorm.control.CairngormEvent;
+	import com.sophware.undoredo.control.BaseUndoRedoEvent;
 	import com.sophware.undoredo.commands.UndoCommand;
 	import tests.com.sophware.undoredo.control.SampleAppendEvent;
 
@@ -29,7 +29,7 @@ package tests.com.sophware.undoredo.commands
 			_data.value = _data.value.slice( 0, _data.value.length - _appendText.length );
 		}
 		
-		public override function redo(event:CairngormEvent = null):void
+		public override function redo(event:BaseUndoRedoEvent = null):void
 		{
 			if (event != null) {
 				_data = (event as SampleAppendEvent).data;

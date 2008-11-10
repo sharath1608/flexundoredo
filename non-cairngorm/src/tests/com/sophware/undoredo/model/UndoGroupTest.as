@@ -22,7 +22,7 @@ package tests.com.sophware.undoredo.model
 	import com.sophware.undoredo.model.UndoGroup;
 	import com.sophware.undoredo.model.UndoStack;
 	import com.sophware.undoredo.commands.UndoCommand;
-	import com.sophware.undoredo.control.CairngormUndoEvent;
+	import com.sophware.undoredo.control.UndoEvent;
 	
 	import tests.com.sophware.undoredo.control.SampleAppendEvent;
 

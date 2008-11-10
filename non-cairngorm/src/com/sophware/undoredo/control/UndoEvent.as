@@ -15,28 +15,26 @@
  */
 package com.sophware.undoredo.control
 {
-	import com.adobe.cairngorm.control.CairngormEvent;
-
 	/**
-	 * A CairngormUndoEvent that contains a description of the undo/redo
+	 * A UndoEvent that contains a description of the undo/redo
 	 * operation.
 	 * 
 	 * <p>The text property contains text that can be displayed to the user
 	 */
-	public class CairngormUndoEvent extends CairngormEvent
+	public class UndoEvent extends BaseUndoRedoEvent
 	{
 		/**
 		 * A String that may be used as the event type when working with the
 		 * FrontController.
 		 */
-		public static const EVENT_TYPE:String = "cairngorm_undo_event";
+		public static const EVENT_TYPE:String = "undo_event";
 		
 		private var _text:String;
 		
 		/**
-		 * Creates a CairngormUndoEvent
+		 * Creates a UndoEvent
 		 */
-		public function CairngormUndoEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false)
+		public function UndoEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false)
 		{
 			super(type, bubbles, cancelable);
 		}

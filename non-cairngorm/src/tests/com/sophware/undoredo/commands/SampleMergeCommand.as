@@ -18,8 +18,7 @@ package tests.com.sophware.undoredo.commands
 	import com.sophware.undoredo.control.BaseUndoRedoEvent;
 	import com.sophware.undoredo.commands.UndoCommand;
 	import com.sophware.undoredo.commands.IUndoCommand;
-	import com.adobe.cairngorm.control.CairngormEvent;
-
+	
 	public class SampleMergeCommand extends UndoCommand
 	{
 		

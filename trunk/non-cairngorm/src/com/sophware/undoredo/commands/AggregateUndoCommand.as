@@ -16,8 +16,7 @@
 package com.sophware.undoredo.commands
 {
 	import mx.collections.ArrayCollection;
-	
-	import com.adobe.cairngorm.control.CairngormEvent;
+	import com.sophware.undoredo.control.BaseUndoRedoEvent;
 	
 	/**
 	 * Handles a set of synchronous commands as a single undoable operation.
@@ -119,7 +118,7 @@ package com.sophware.undoredo.commands
 		 * @param event The parameter will be null for redo events and may be
 		 * null the first time the command is executed.
 		 */
-		public override function redo( event : CairngormEvent = null ) : void
+		public override function redo( event : BaseUndoRedoEvent = null ) : void
 		{
 			// always apply redo in the same order
 			var sz:Number = _commands.length;

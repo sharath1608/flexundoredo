@@ -15,7 +15,7 @@
  */
 package tests.com.sophware.undoredo.commands
 {
-
+	import com.sophware.undoredo.control.BaseUndoRedoEvent;
 	import com.sophware.undoredo.commands.UndoCommand;
 	import com.sophware.undoredo.commands.IUndoCommand;
 	import com.adobe.cairngorm.control.CairngormEvent;
@@ -32,7 +32,7 @@ package tests.com.sophware.undoredo.commands
 			_text = text;
 		}
 		
-		public override function redo( event : CairngormEvent = null ) : void
+		public override function redo( event : BaseUndoRedoEvent = null ) : void
 		{
 			_data.data = _data.data + _text;
 		}

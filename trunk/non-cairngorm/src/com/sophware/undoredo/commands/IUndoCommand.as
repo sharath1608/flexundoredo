@@ -15,9 +15,8 @@
  */
 package com.sophware.undoredo.commands
 {
-	import com.adobe.cairngorm.commands.ICommand;
-	import com.adobe.cairngorm.control.CairngormEvent;
-
+	import com.sophware.undoredo.control.BaseUndoRedoEvent;
+	
 	/**
 	 * The Undo/Redo interface used by the undo/redo stack
 	 */
@@ -68,7 +67,7 @@ package com.sophware.undoredo.commands
 		 * @see com.sophware.undoredo.control.CairngormUndoEvent
 		 * @see com.sophware.undoredo.control.UndoFrontController
 		 */
-		function redo( event : CairngormEvent = null) : void;
+		function redo( event : BaseUndoRedoEvent = null) : void;
 
 		/**
 		 * Returns the id associated with this command type.

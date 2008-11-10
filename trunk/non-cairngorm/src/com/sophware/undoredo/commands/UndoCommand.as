@@ -15,10 +15,10 @@
  */
 package com.sophware.undoredo.commands
 {
-	import com.adobe.cairngorm.commands.ICommand;
-	import com.adobe.cairngorm.control.CairngormEvent;
+	import com.sophware.undoredo.commands.ICommand;
+	import com.sophware.undoredo.control.BaseUndoRedoEvent;
 	import com.sophware.undoredo.UndoRedoConstants;
-	import com.sophware.undoredo.control.CairngormUndoEvent;
+	import com.sophware.undoredo.control.UndoEvent;
 	
 	/**
 	 * A suitable base class that implements the IUndoCommand interface.
@@ -82,7 +82,7 @@ package com.sophware.undoredo.commands
 		 * will be null.
 		 * </p>
 		 */
-		public function redo( event : CairngormEvent = null ) : void
+		public function redo( event : BaseUndoRedoEvent = null ) : void
 		{
 			// must be overriden in derived class
 		}
@@ -99,11 +99,11 @@ package com.sophware.undoredo.commands
 		 * the undo command to the text property of the event.
 		 * </p>
 		 */
-		public function execute( event : CairngormEvent ) : void
+		public function execute( event : BaseUndoRedoEvent ) : void
 		{
 			// doesn't need to be overridden, should always be equivalent to redo
-			if (event is CairngormUndoEvent)
-				text = (event as CairngormUndoEvent).text;
+			if (event is UndoEvent)
+				text = (event as UndoEvent).text;
 			
 			redo(event);
 		}

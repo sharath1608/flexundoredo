@@ -19,9 +19,8 @@ package tests.com.sophware.undoredo.commands
 	import flash.geom.Point;
 	import mx.collections.ArrayCollection;
 
-	import com.adobe.cairngorm.control.CairngormEvent;
-	
 	import com.sophware.undoredo.commands.UndoCommand;
+	import com.sophware.undoredo.control.BaseUndoRedoEvent;
 
 	import tests.com.sophware.undoredo.control.SampleMatrixEvent;
 
@@ -39,7 +38,7 @@ package tests.com.sophware.undoredo.commands
 			_i.invert();
 		}
 
-		public override function redo( event : CairngormEvent = null ) : void
+		public override function redo( event : BaseUndoRedoEvent = null ) : void
 		{
 			if (!(event is SampleMatrixEvent))
 				return;

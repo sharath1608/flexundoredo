@@ -15,8 +15,6 @@
  */
 package com.sophware.undoredo.control
 {
-	import com.adobe.cairngorm.control.CairngormEvent;
-	
 	/**
 	 * An event that stores information about a undo or redo request.
 	 * 
@@ -27,7 +25,7 @@ package com.sophware.undoredo.control
 	 * operation.
 	 * </p>
 	 */
-	public class UndoStackEvent extends CairngormEvent
+	public class UndoStackEvent extends BaseUndoRedoEvent
 	{
 		/**
 		 * Event type for an undo operation.
@@ -39,11 +37,6 @@ package com.sophware.undoredo.control
 		 */
 		public static const REDO:String = "undo_stack_event_redo";
 		
-		/**
-		 * The factory which returns the undo group that's in use.
-		 */
-		public var factory:IUndoGroupFactory;
-
 		/**
 		 * Creates an undo/redo event that defaults to the undo operation.
 		 * 
@@ -61,12 +54,8 @@ package com.sophware.undoredo.control
 		 * either the <code>UNDO</code> or <code>REDO</code> constants
 		 * specified above.
 		 */
-		public function UndoStackEvent(op:String = UNDO, factory:IUndoGroupFactory = null)
+		public function UndoStackEvent(op:String = UNDO)
 		{
-			this.factory = factory;
-			if (this.factory == null) {
-				this.factory = new NamedUndoGroupFactory();
-			}
 			super(op);
 		}
 	}

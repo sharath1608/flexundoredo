@@ -15,9 +15,9 @@
  */
 package tests.com.sophware.undoredo.control
 {
-	import com.adobe.cairngorm.control.CairngormEvent;
-
-	public class SampleMatrixEvent extends CairngormEvent
+	import com.sophware.undoredo.control.BaseUndoRedoEvent;
+	
+	public class SampleMatrixEvent extends BaseUndoRedoEvent
 	{
 		public static const POINT:String = "sample_matrix_event";
 		

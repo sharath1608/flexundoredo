@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Application
+<mx:Canvas
 	xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns:flexunit="flexunit.flexui.*"
-	creationComplete="runTests()" >
+	creationComplete="runTests()"
+	width="100%"
+	height="100%"
+	>
 
 	<mx:Script>
 		<![CDATA[
@@ -11,7 +14,6 @@
 			
 			import tests.com.sophware.undoredo.model.UndoStackTest;
 			import tests.com.sophware.undoredo.model.UndoGroupTest;
-			import tests.com.sophware.undoredo.control.UndoFrontControllerTest;
 			import tests.com.sophware.undoredo.commands.UndoCommandTest;
 			import tests.com.sophware.undoredo.commands.AggregateUndoCommandTest;
 			
@@ -24,7 +26,6 @@
 				var ts:TestSuite = new TestSuite();
 				ts.addTestSuite(UndoStackTest);
 				ts.addTestSuite(UndoCommandTest);
-				ts.addTestSuite(UndoFrontControllerTest);
 				ts.addTestSuite(UndoGroupTest);
 				ts.addTestSuite(AggregateUndoCommandTest);
 				return ts;
@@ -34,4 +35,4 @@
 
 	<flexunit:TestRunnerBase id="testRunner" width="100%" height="100%" />
 
-</mx:Application>
+</mx:Canvas>

@@ -95,7 +95,7 @@ package com.sophware.undoredo.commands
 		 * <p>
 		 * This normally does not need to be overridden as it calls redo()
 		 * which generally performs the necessary changes.  If the event type
-		 * is CairngormUndoEvent, before calling redo, it will set the text of
+		 * is BaseUndoRedoEvent, before calling redo, it will set the text of
 		 * the undo command to the text property of the event.
 		 * </p>
 		 */

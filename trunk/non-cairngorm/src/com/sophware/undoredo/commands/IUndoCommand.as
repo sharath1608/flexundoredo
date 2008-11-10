@@ -49,7 +49,7 @@ package com.sophware.undoredo.commands
 		 *
 		 * <p>
 		 * If the command wishes to use the text associated with a
-		 * CairngormUndoEvent as its text then the redo event is responsible
+		 * UndoEvent as its text then the redo event is responsible
 		 * for pulling the data out of the event and placing it into the text
 		 * property of the command.  This is the default behavior in
 		 * UndoCommand, but overriding functions will need to call the
@@ -58,13 +58,13 @@ package com.sophware.undoredo.commands
 		 *
 		 * <p>
 		 * By default, if <code>event</code> is of type
-		 * <code>CairngormUndoEvent</code> the provided
+		 * <code>BaseUndoRedoEvent</code> the provided
 		 * <code>UndoFrontController</code> will pull the text property of
 		 * <code>event</code> into the text property of the command.
 		 * </p>
 		 * 
 		 * @see com.sophware.undoredo.model.UndoStack
-		 * @see com.sophware.undoredo.control.CairngormUndoEvent
+		 * @see com.sophware.undoredo.control.BaseUndoRedoEvent
 		 * @see com.sophware.undoredo.control.UndoFrontController
 		 */
 		function redo( event : BaseUndoRedoEvent = null) : void;

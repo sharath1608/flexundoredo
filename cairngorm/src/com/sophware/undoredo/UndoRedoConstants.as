@@ -15,6 +15,13 @@
  */
 package com.sophware.undoredo
 {
+	/**
+	 * Holds the constants that can be used to check command type.
+	 *
+	 * <p>
+	 * Three different undo types currently exist. See <code>IUndoCommand</code>
+	 * </p>
+	 */
 	public class UndoRedoConstants
 	{
 		/**
